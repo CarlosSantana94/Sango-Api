@@ -24,6 +24,9 @@ public class SubOpcionesPrenda {
     @Column
     private String descripcion;
 
+    @Column
+    private String img;
+
     @JoinColumn(name = "opcion_id")
     @ManyToOne
     private OpcionesPrenda opcionesPrenda;

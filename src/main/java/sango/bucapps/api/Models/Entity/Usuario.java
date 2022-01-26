@@ -8,8 +8,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-@Table(name = "opciones_prenda")
-public class OpcionesPrenda {
+public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,9 +18,20 @@ public class OpcionesPrenda {
     private String nombre;
 
     @Column
+    private String password;
+
+    @Column
+    private String email;
+
+    @Column
+    private Long tel;
+
+    @Column
+    private String token;
+
+    @Column
     private String img;
 
-    @JoinColumn(name = "servicio_id")
-    @ManyToOne
-    private Servicio servicio;
+
+
 }
