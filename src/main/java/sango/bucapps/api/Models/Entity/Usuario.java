@@ -11,8 +11,7 @@ import javax.persistence.*;
 public class Usuario {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     @Column
     private String nombre;
@@ -31,7 +30,5 @@ public class Usuario {
 
     @Column
     private String img;
-
-
 
 }

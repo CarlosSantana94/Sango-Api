@@ -6,6 +6,7 @@ import sango.bucapps.api.Models.DTO.OpcionesPrendaDto;
 import sango.bucapps.api.Models.DTO.SubOpcionesPrendaDto;
 import sango.bucapps.api.Models.Entity.OpcionesPrenda;
 import sango.bucapps.api.Models.Entity.SubOpcionesPrenda;
+import sango.bucapps.api.Repositorys.CarritoRepository;
 import sango.bucapps.api.Repositorys.OpcionesPrendaRepository;
 import sango.bucapps.api.Repositorys.SubOpcionesPrendaRepository;
 
@@ -20,6 +21,9 @@ public class ProductosService {
 
     @Autowired
     private SubOpcionesPrendaRepository subOpcionesPrendaRepository;
+
+    @Autowired
+    private CarritoRepository carritoRepository;
 
     public List<OpcionesPrendaDto> obtenerTodasLasOpcionesPorServicio(Long servicioId) {
         List<OpcionesPrendaDto> opcionesPrendas = new ArrayList<>();
@@ -37,7 +41,7 @@ public class ProductosService {
 
     }
 
-    public List<SubOpcionesPrendaDto> obtenerTodasLasSubOpcionesPorPrenda(Long opcionPrendaId) {
+    public List<SubOpcionesPrendaDto> obtenerTodasLasSubOpcionesPorPrenda(Long opcionPrendaId, String idUsuario) {
         List<SubOpcionesPrendaDto> subOpcionesPrendas = new ArrayList<>();
 
         for (SubOpcionesPrenda opc : subOpcionesPrendaRepository.getAllByOpcionesPrendaIdOrderByNombre(opcionPrendaId)) {
@@ -47,6 +51,11 @@ public class ProductosService {
             dto.setPrecio(opc.getPrecio());
             dto.setDescripcion(opc.getDescripcion());
             dto.setImg(opc.getImg());
+
+
+            dto.setCantidad(carritoRepository
+                    .obtenerCantidadDePrendaEnCarrito(carritoRepository
+                            .getAllByUsuarioIdAndEstado(idUsuario, "Nuevo").getId(), opc.getId()));
 
             subOpcionesPrendas.add(dto);
         }

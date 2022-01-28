@@ -7,11 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class SubOpcionesPrendaDto {
-    private Long id;
-    private String nombre;
-    private Double precio;
-    private String descripcion;
-    private String img;
-    private Long cantidad;
+public class MsgRespuestaDto {
+    private String mensaje;
+    private Long idError;
+    private Boolean hayError = false;
 }
