@@ -20,6 +20,10 @@ public class Carrito {
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
+    @ManyToOne
+    @JoinColumn(name = "direccion_id")
+    private Direccion direccion;
+
     @Column
     private Double total;
 
@@ -34,5 +38,7 @@ public class Carrito {
 
     @ManyToMany
     private List<SubOpcionesPrenda> subOpcionesPrendas;
+
+
 
 }
