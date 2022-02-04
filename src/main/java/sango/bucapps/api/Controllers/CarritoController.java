@@ -3,6 +3,7 @@ package sango.bucapps.api.Controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import sango.bucapps.api.Models.DTO.CarritoDto;
+import sango.bucapps.api.Models.DTO.ResumenCarritoDto;
 import sango.bucapps.api.Services.CarritoService;
 
 @RestController
@@ -31,6 +32,11 @@ public class CarritoController {
                                         @PathVariable("direccionId") Long direccionId
     ) {
         return carritoService.actualizarDireccionEnCarrito(idUsuario,direccionId);
+    }
+
+    @GetMapping(value = "/carrito/resumen")
+    public ResumenCarritoDto obtenerResumenDeCarrito(@RequestHeader("idUsuario") String idUsuario){
+        return carritoService.obtenerResumenDeCarrito(idUsuario);
     }
 
 

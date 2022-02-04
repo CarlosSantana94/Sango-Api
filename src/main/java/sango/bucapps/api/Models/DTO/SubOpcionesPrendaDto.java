@@ -11,6 +11,7 @@ public class SubOpcionesPrendaDto {
     private Long id;
     private String nombre;
     private Double precio;
+    private Double precioTotal;
     private String descripcion;
     private String img;
     private Long cantidad;

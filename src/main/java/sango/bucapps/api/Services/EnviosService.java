@@ -54,7 +54,7 @@ public class EnviosService {
                     - enviosRepository.countAllByFechaRecoleccion(sqlDate);
             enviosDto.setDisponibles(disponibles);
 
-            if (disponibles > 0) {
+            if (disponibles > 0 && c.getTime().getDay() != 0) {
                 listadoDisponible.add(enviosDto);
                 diasDisponibles--;
             }
