@@ -1,16 +1,26 @@
 package sango.bucapps.api.Services;
 
+import io.conekta.*;
+import io.conekta.Error;
+import sango.bucapps.api.Models.DTO.conekta.PaymentMethodDto;
+
+import com.google.gson.Gson;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sango.bucapps.api.Models.DTO.CarritoDto;
+import sango.bucapps.api.Models.DTO.MsgRespuestaDto;
 import sango.bucapps.api.Models.DTO.ResumenCarritoDto;
 import sango.bucapps.api.Models.DTO.SubOpcionesPrendaDto;
+import sango.bucapps.api.Models.DTO.conekta.*;
 import sango.bucapps.api.Models.Entity.Carrito;
 import sango.bucapps.api.Models.Entity.Envios;
 import sango.bucapps.api.Models.Entity.SubOpcionesPrenda;
+import sango.bucapps.api.Models.Entity.Usuario;
 import sango.bucapps.api.Repositorys.CarritoRepository;
 import sango.bucapps.api.Repositorys.DireccionRepository;
 import sango.bucapps.api.Repositorys.EnviosRepository;
+import sango.bucapps.api.Repositorys.UsuarioRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +36,9 @@ public class CarritoService {
 
     @Autowired
     private EnviosRepository enviosRepository;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     public CarritoDto actualizarCarrito(String idUsuario, Long subOpcionesPrendaId, Long agregar) {
         CarritoDto carritoDto = obtenerCarritoNuevo(idUsuario);
@@ -104,6 +117,7 @@ public class CarritoService {
                 subDtoNew.setPrecioTotal(sub.getPrecio());
                 subDtoNew.setImg(sub.getImg());
                 subDtoNew.setCantidad(1L);
+                subDtoNew.setServicio(sub.getOpcionesPrenda().getServicio().getNombre());
 
                 subDtoList.add(subDtoNew);
             }
@@ -116,4 +130,90 @@ public class CarritoService {
 
         return resumen;
     }
+
+    public MsgRespuestaDto pagarCarrito(String idUsuario, String metodo, String cuandoOToken) throws Error {
+        ResumenCarritoDto resumenCarritoDto = obtenerResumenDeCarrito(idUsuario);
+        Carrito carrito = carritoRepository.getAllByUsuarioIdAndEstado(idUsuario, "Nuevo");
+        MsgRespuestaDto respuestaDto = new MsgRespuestaDto();
+
+        carrito.setFormaDePago(metodo);
+        carrito.setCuandoOToken(cuandoOToken);
+
+        if (metodo.equals("tarjeta")) {
+            ConektaDto conektaDto = new ConektaDto();
+            MetadataDto metadataDto = new MetadataDto();
+            List<LineItemDto> lineItemDtoList = new ArrayList<>();
+            CustomerInfoDto customerInfoDto = new CustomerInfoDto();
+            List<ChargesDto> chargesDtoList = new ArrayList<>();
+
+            metadataDto.setTest(true);
+
+            for (SubOpcionesPrendaDto prenda : resumenCarritoDto.getPrendasList()) {
+                LineItemDto lineItemDto = new LineItemDto();
+                lineItemDto.setName(prenda.getNombre());
+                lineItemDto.setDescription(prenda.getDescripcion());
+                lineItemDto.setUnit_price((int) (prenda.getPrecio() * 100));
+                lineItemDto.setQuantity(prenda.getCantidad());
+                lineItemDto.setType(prenda.getServicio());
+
+                lineItemDtoList.add(lineItemDto);
+            }
+
+            Usuario usuario = usuarioRepository.getById(idUsuario);
+
+            customerInfoDto.setName(resumenCarritoDto.getNombre());
+            customerInfoDto.setPhone(resumenCarritoDto.getTel().toString());
+            customerInfoDto.setEmail(usuario.getEmail());
+
+            PaymentMethodDto paymentMethodDto = new PaymentMethodDto();
+            paymentMethodDto.setType("card");
+            paymentMethodDto.setToken_id("tok_test_visa_4242");
+
+            ChargesDto chargesDto = new ChargesDto();
+            chargesDto.setPayment_method(paymentMethodDto);
+            chargesDto.setAmount((int) (resumenCarritoDto.getTotal() * 100));
+            chargesDtoList.add(chargesDto);
+
+            conektaDto.setMetadata(metadataDto);
+            conektaDto.setCharges(chargesDtoList);
+            conektaDto.setLine_items(lineItemDtoList);
+            conektaDto.setCustomer_info(customerInfoDto);
+
+
+            try {
+                Conekta.setApiKey("key_oLvDZeZYTN7HAoNYYAffuw");
+
+                String jsonInString = new Gson().toJson(conektaDto);
+                System.out.println(jsonInString);
+                JSONObject completeOrderJSON = new JSONObject(jsonInString);
+
+
+                Order completeOrder = Order.create(completeOrderJSON);
+                carrito.setOrdenConekta(completeOrder.getId());
+                carrito.setEstado("Creada");
+                respuestaDto.setMensaje("Orden Completada");
+
+                carritoRepository.save(carrito);
+                obtenerCarritoNuevo(idUsuario);
+
+            } catch (ErrorList e) {
+                respuestaDto.setHayError(true);
+                respuestaDto.setMensaje(e.details.toString());
+                System.out.println(e.details);
+            }
+
+
+        } else if (metodo.equals("efectivo")) {
+            carrito.setEstado("Creada");
+            respuestaDto.setMensaje("Orden Completada");
+
+            carritoRepository.save(carrito);
+            obtenerCarritoNuevo(idUsuario);
+        }
+
+
+        return respuestaDto;
+    }
+
+
 }

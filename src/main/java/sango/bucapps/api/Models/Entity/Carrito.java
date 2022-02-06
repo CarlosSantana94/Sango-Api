@@ -34,11 +34,16 @@ public class Carrito {
     private String formaDePago;
 
     @Column
+    private String cuandoOToken;
+
+    @Column
+    private String ordenConekta;
+
+    @Column
     private Timestamp creado;
 
     @ManyToMany
     private List<SubOpcionesPrenda> subOpcionesPrendas;
-
 
 
 }
