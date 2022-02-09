@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Getter
@@ -20,4 +21,7 @@ public class ResumenCarritoDto {
     private Integer cantidadPrendas;
     private List<SubOpcionesPrendaDto> prendasList;
     private Double total;
+    private String estado;
+    private Long id;
+    private Timestamp creado;
 }

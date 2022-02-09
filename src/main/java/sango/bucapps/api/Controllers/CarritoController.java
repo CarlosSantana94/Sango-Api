@@ -8,6 +8,8 @@ import sango.bucapps.api.Models.DTO.MsgRespuestaDto;
 import sango.bucapps.api.Models.DTO.ResumenCarritoDto;
 import sango.bucapps.api.Services.CarritoService;
 
+import java.util.List;
+
 @RestController
 @CrossOrigin(maxAge = 3600)
 public class CarritoController {
@@ -38,7 +40,7 @@ public class CarritoController {
 
     @GetMapping(value = "/carrito/resumen")
     public ResumenCarritoDto obtenerResumenDeCarrito(@RequestHeader("idUsuario") String idUsuario) {
-        return carritoService.obtenerResumenDeCarrito(idUsuario);
+        return carritoService.obtenerResumenDeCarrito(idUsuario, null);
     }
 
     @PostMapping(value = "/carrito/pagar/{metodo}/{cuandoOToken}")
@@ -47,6 +49,19 @@ public class CarritoController {
                                         @PathVariable("metodo") String cuandoOToken
     ) throws Error {
         return carritoService.pagarCarrito(idUsuario, metodo, cuandoOToken);
+    }
+
+    @GetMapping(value = "/carrito/pedidos")
+    public List<ResumenCarritoDto> obtenerPedidos(@RequestHeader("idUsuario") String idUsuario) {
+        return carritoService.obtenerPedidos(idUsuario);
+
+    }
+
+    @GetMapping(value = "/carrito/id/{idCarrito}")
+    public ResumenCarritoDto obtenerResumenCarritoById(@RequestHeader("idUsuario") String idUsuario,
+                                                       @PathVariable("idCarrito") Long idCarrito) {
+
+        return carritoService.obtenerResumenDeCarrito(idUsuario, idCarrito);
     }
 
 

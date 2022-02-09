@@ -1,10 +1,10 @@
 package sango.bucapps.api.Services;
 
-import io.conekta.*;
-import io.conekta.Error;
-import sango.bucapps.api.Models.DTO.conekta.PaymentMethodDto;
-
 import com.google.gson.Gson;
+import io.conekta.Conekta;
+import io.conekta.Error;
+import io.conekta.ErrorList;
+import io.conekta.Order;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -85,13 +85,19 @@ public class CarritoService {
         return obtenerCarritoNuevo(idUsuario);
     }
 
-    public ResumenCarritoDto obtenerResumenDeCarrito(String idUsuario) {
-        Carrito carrito = carritoRepository.getAllByUsuarioIdAndEstado(idUsuario, "Nuevo");
+    public ResumenCarritoDto obtenerResumenDeCarrito(String idUsuario,Long idCarrito) {
+        Carrito carrito = new Carrito();
+        if (idCarrito==null) {
+            carrito = carritoRepository.getAllByUsuarioIdAndEstado(idUsuario, "Nuevo");
+        }else {
+            carrito = carritoRepository.getById(idCarrito);
+        }
         Envios envios = enviosRepository.getAllByCarritoId(carrito.getId());
 
         ResumenCarritoDto resumen = new ResumenCarritoDto();
         resumen.setEntrega(envios.getFechaEntrega());
         resumen.setRecoleccion(envios.getFechaRecoleccion());
+        resumen.setId(carrito.getId());
         if (carrito.getDireccion() != null) {
             resumen.setDireccion(carrito.getDireccion().getDireccion());
             resumen.setCp(carrito.getDireccion().getCp());
@@ -123,6 +129,7 @@ public class CarritoService {
             }
 
         }
+        resumen.setCreado(carrito.getCreado());
         resumen.setTotal(carrito.getTotal());
         resumen.setCantidadPrendas(carrito.getSubOpcionesPrendas().size());
         resumen.setPrendasList(subDtoList);
@@ -132,7 +139,7 @@ public class CarritoService {
     }
 
     public MsgRespuestaDto pagarCarrito(String idUsuario, String metodo, String cuandoOToken) throws Error {
-        ResumenCarritoDto resumenCarritoDto = obtenerResumenDeCarrito(idUsuario);
+        ResumenCarritoDto resumenCarritoDto = obtenerResumenDeCarrito(idUsuario,null);
         Carrito carrito = carritoRepository.getAllByUsuarioIdAndEstado(idUsuario, "Nuevo");
         MsgRespuestaDto respuestaDto = new MsgRespuestaDto();
 
@@ -215,5 +222,27 @@ public class CarritoService {
         return respuestaDto;
     }
 
+
+    public List<ResumenCarritoDto> obtenerPedidos(String idUsuario) {
+        List<ResumenCarritoDto> list = new ArrayList<>();
+
+        List<Carrito> carritos = carritoRepository.getAllByUsuarioId(idUsuario);
+
+        for (Carrito c : carritos) {
+            ResumenCarritoDto resumenCarritoDto = new ResumenCarritoDto();
+            Envios envios = enviosRepository.getAllByCarritoId(c.getId());
+
+            resumenCarritoDto.setId(c.getId());
+            resumenCarritoDto.setRecoleccion(envios.getFechaRecoleccion());
+            resumenCarritoDto.setEntrega(envios.getFechaEntrega());
+            resumenCarritoDto.setCantidadPrendas(c.getSubOpcionesPrendas().size());
+            resumenCarritoDto.setTotal(c.getTotal());
+            resumenCarritoDto.setEstado(c.getEstado());
+
+            list.add(resumenCarritoDto);
+        }
+
+        return list;
+    }
 
 }
