@@ -43,7 +43,7 @@ public class CarritoService {
     public CarritoDto actualizarCarrito(String idUsuario, Long subOpcionesPrendaId, Long agregar) {
         CarritoDto carritoDto = obtenerCarritoNuevo(idUsuario);
         if (agregar == 1) {
-            //Agregar prenda
+            // Agregar prenda
             carritoRepository.insertarPrendaEnCarrito(carritoDto.getId(), subOpcionesPrendaId);
         } else if (agregar == 0) {
             // Quitar Prenda
@@ -85,11 +85,11 @@ public class CarritoService {
         return obtenerCarritoNuevo(idUsuario);
     }
 
-    public ResumenCarritoDto obtenerResumenDeCarrito(String idUsuario,Long idCarrito) {
+    public ResumenCarritoDto obtenerResumenDeCarrito(String idUsuario, Long idCarrito) {
         Carrito carrito = new Carrito();
-        if (idCarrito==null) {
+        if (idCarrito == null) {
             carrito = carritoRepository.getAllByUsuarioIdAndEstado(idUsuario, "Nuevo");
-        }else {
+        } else {
             carrito = carritoRepository.getById(idCarrito);
         }
         Envios envios = enviosRepository.getAllByCarritoId(carrito.getId());
@@ -139,7 +139,7 @@ public class CarritoService {
     }
 
     public MsgRespuestaDto pagarCarrito(String idUsuario, String metodo, String cuandoOToken) throws Error {
-        ResumenCarritoDto resumenCarritoDto = obtenerResumenDeCarrito(idUsuario,null);
+        ResumenCarritoDto resumenCarritoDto = obtenerResumenDeCarrito(idUsuario, null);
         Carrito carrito = carritoRepository.getAllByUsuarioIdAndEstado(idUsuario, "Nuevo");
         MsgRespuestaDto respuestaDto = new MsgRespuestaDto();
 
@@ -229,17 +229,19 @@ public class CarritoService {
         List<Carrito> carritos = carritoRepository.getAllByUsuarioId(idUsuario);
 
         for (Carrito c : carritos) {
-            ResumenCarritoDto resumenCarritoDto = new ResumenCarritoDto();
-            Envios envios = enviosRepository.getAllByCarritoId(c.getId());
+            if (!c.getEstado().equals("Nuevo")) {
+                ResumenCarritoDto resumenCarritoDto = new ResumenCarritoDto();
+                Envios envios = enviosRepository.getAllByCarritoId(c.getId());
 
-            resumenCarritoDto.setId(c.getId());
-            resumenCarritoDto.setRecoleccion(envios.getFechaRecoleccion());
-            resumenCarritoDto.setEntrega(envios.getFechaEntrega());
-            resumenCarritoDto.setCantidadPrendas(c.getSubOpcionesPrendas().size());
-            resumenCarritoDto.setTotal(c.getTotal());
-            resumenCarritoDto.setEstado(c.getEstado());
+                resumenCarritoDto.setId(c.getId());
+                resumenCarritoDto.setRecoleccion(envios.getFechaRecoleccion());
+                resumenCarritoDto.setEntrega(envios.getFechaEntrega());
+                resumenCarritoDto.setCantidadPrendas(c.getSubOpcionesPrendas().size());
+                resumenCarritoDto.setTotal(c.getTotal());
+                resumenCarritoDto.setEstado(c.getEstado());
 
-            list.add(resumenCarritoDto);
+                list.add(resumenCarritoDto);
+            }
         }
 
         return list;

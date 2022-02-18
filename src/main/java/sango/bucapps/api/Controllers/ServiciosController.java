@@ -18,8 +18,8 @@ public class ServiciosController {
     private ServiciosService serviciosService;
 
     @GetMapping(value = "servicios", produces = "application/json")
-    public @ResponseBody
-    List<Servicio> obtenerServicios() {
+    @ResponseBody
+    public List<Servicio> obtenerServicios() {
         return serviciosService.obtenerServicios();
     }
 
