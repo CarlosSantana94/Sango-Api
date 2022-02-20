@@ -1,0 +1,8 @@
+1. mvn clean package
+2. Send JAR scp -i key/id_rsa target\api-0.0.1-SNAPSHOT.jar root@137.184.121.135:/artifact
+3. Connect ssh -i key/id_rsa [root@137.184.121.135](mailto:root@137.184.121.135)
+4. Stop: sudo systemctl stop start-api
+5. Start: systemctl start start-api
+6. systemctl enable start-api
+7. systemctl status start-api
+8. journalctl -u start-api.service -e -f
