@@ -26,4 +26,12 @@ public class ProductosController {
                                                                            @RequestHeader("idUsuario") String idUsuario) {
         return productosService.obtenerTodasLasSubOpcionesPorPrenda(opcionId, idUsuario);
     }
+
+
+    @GetMapping(value = "productos")
+    private List<SubOpcionesPrendaDto> obtenerTodosLosProductos() {
+        return productosService.obtenerTodosLosProductos();
+    }
+
+
 }

@@ -5,12 +5,16 @@ import org.springframework.stereotype.Service;
 import sango.bucapps.api.Models.DTO.OpcionesPrendaDto;
 import sango.bucapps.api.Models.DTO.SubOpcionesPrendaDto;
 import sango.bucapps.api.Models.Entity.OpcionesPrenda;
+import sango.bucapps.api.Models.Entity.Servicio;
 import sango.bucapps.api.Models.Entity.SubOpcionesPrenda;
 import sango.bucapps.api.Repositorys.CarritoRepository;
 import sango.bucapps.api.Repositorys.OpcionesPrendaRepository;
+import sango.bucapps.api.Repositorys.ServiciosRepository;
 import sango.bucapps.api.Repositorys.SubOpcionesPrendaRepository;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -21,6 +25,9 @@ public class ProductosService {
 
     @Autowired
     private SubOpcionesPrendaRepository subOpcionesPrendaRepository;
+
+    @Autowired
+    private ServiciosRepository serviciosRepository;
 
     @Autowired
     private CarritoRepository carritoRepository;
@@ -61,5 +68,29 @@ public class ProductosService {
         }
 
         return subOpcionesPrendas;
+    }
+
+    public List<SubOpcionesPrendaDto> obtenerTodosLosProductos() {
+        List<SubOpcionesPrendaDto> respuesta = new ArrayList<>();
+
+        for (Servicio s : serviciosRepository.findAll()) {
+            for (OpcionesPrendaDto op : obtenerTodasLasOpcionesPorServicio(s.getId())) {
+                for (SubOpcionesPrenda opc : subOpcionesPrendaRepository.getAllByOpcionesPrendaIdOrderByNombre(op.getId())) {
+                    SubOpcionesPrendaDto dto = new SubOpcionesPrendaDto();
+                    dto.setId(opc.getId());
+                    dto.setNombre(opc.getNombre());
+                    dto.setPrecio(opc.getPrecio());
+                    dto.setDescripcion(opc.getDescripcion());
+                    dto.setImg(opc.getImg());
+                    dto.setServicio(s.getNombre());
+
+                    respuesta.add(dto);
+                }
+            }
+        }
+
+        Collections.sort(respuesta, Comparator.comparing(SubOpcionesPrendaDto::getNombre));
+
+        return respuesta;
     }
 }
