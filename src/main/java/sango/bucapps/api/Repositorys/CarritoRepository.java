@@ -29,8 +29,6 @@ public interface CarritoRepository extends JpaRepository<Carrito, Long> {
                                 @Param("subPrendaId") Long subPrendaId);
 
 
-
-
     @Modifying
     @Transactional
     @Query(value = "delete\n" +
@@ -53,9 +51,14 @@ public interface CarritoRepository extends JpaRepository<Carrito, Long> {
             "    where carrito_id = :carritoId\n" +
             "      and sub_opciones_prendas_id = :subPrendaId);", nativeQuery = true)
     int borrarPrendaEnCarritoPorKiloMenorA4(@Param("carritoId") Long carritoId,
-                              @Param("subPrendaId") Long subPrendaId);
+                                            @Param("subPrendaId") Long subPrendaId);
 
 
+    @Query(value = "select count(*)\n" +
+            "from carrito_sub_opciones_prendas\n" +
+            "where carrito_id = :carritoId\n" +
+            "  and sub_opciones_prendas_id = 79", nativeQuery = true)
+    Long contarCuantasPrendasPorKiloHay(@Param("carritoId") Long carritoId);
 
     List<Carrito> getAllByUsuarioId(String idUsuario);
 }

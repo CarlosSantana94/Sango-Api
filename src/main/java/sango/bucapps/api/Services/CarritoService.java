@@ -47,10 +47,20 @@ public class CarritoService {
         CarritoDto carritoDto = obtenerCarritoNuevo(idUsuario);
         if (agregar == 1) {
             // Agregar prenda
-            carritoRepository.insertarPrendaEnCarrito(carritoDto.getId(), subOpcionesPrendaId);
+            if (Objects.equals(subOpcionesPrendaId, ID_KILO_LAVANDERIA)
+                    && carritoRepository.contarCuantasPrendasPorKiloHay(carritoDto.getId()) == 0) {
+                for (int i = 0; i < 4; i++) {
+                    carritoRepository.insertarPrendaEnCarrito(carritoDto.getId(), ID_KILO_LAVANDERIA);
+                }
+
+            }else {
+                carritoRepository.insertarPrendaEnCarrito(carritoDto.getId(), subOpcionesPrendaId);
+            }
+
         } else if (agregar == 0) {
             // Quitar Prenda
-            if (Objects.equals(subOpcionesPrendaId, ID_KILO_LAVANDERIA)) {
+            if (Objects.equals(subOpcionesPrendaId, ID_KILO_LAVANDERIA)
+                    && carritoRepository.contarCuantasPrendasPorKiloHay(carritoDto.getId()) <= 4) {
                 carritoRepository.borrarPrendaEnCarritoPorKiloMenorA4(carritoDto.getId(), ID_KILO_LAVANDERIA);
             } else {
                 carritoRepository.borrarPrendaEnCarrito(carritoDto.getId(), subOpcionesPrendaId);
