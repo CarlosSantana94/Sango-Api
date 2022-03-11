@@ -42,7 +42,8 @@ public class Carrito {
     @Column
     private Timestamp creado;
 
-    @ManyToMany
+
+    @ManyToMany(fetch = FetchType.LAZY)
     private List<SubOpcionesPrenda> subOpcionesPrendas;
 
 

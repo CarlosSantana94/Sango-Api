@@ -24,6 +24,7 @@ import sango.bucapps.api.Repositorys.UsuarioRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -40,6 +41,8 @@ public class CarritoService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    private static final Long ID_KILO_LAVANDERIA = 79L;
+
     public CarritoDto actualizarCarrito(String idUsuario, Long subOpcionesPrendaId, Long agregar) {
         CarritoDto carritoDto = obtenerCarritoNuevo(idUsuario);
         if (agregar == 1) {
@@ -47,7 +50,11 @@ public class CarritoService {
             carritoRepository.insertarPrendaEnCarrito(carritoDto.getId(), subOpcionesPrendaId);
         } else if (agregar == 0) {
             // Quitar Prenda
-            carritoRepository.borrarPrendaEnCarrito(carritoDto.getId(), subOpcionesPrendaId);
+            if (Objects.equals(subOpcionesPrendaId, ID_KILO_LAVANDERIA)) {
+                carritoRepository.borrarPrendaEnCarritoPorKiloMenorA4(carritoDto.getId(), ID_KILO_LAVANDERIA);
+            } else {
+                carritoRepository.borrarPrendaEnCarrito(carritoDto.getId(), subOpcionesPrendaId);
+            }
         }
 
         return carritoDto;
