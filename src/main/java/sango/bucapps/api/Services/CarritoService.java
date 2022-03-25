@@ -53,7 +53,7 @@ public class CarritoService {
                     carritoRepository.insertarPrendaEnCarrito(carritoDto.getId(), ID_KILO_LAVANDERIA);
                 }
 
-            }else {
+            } else {
                 carritoRepository.insertarPrendaEnCarrito(carritoDto.getId(), subOpcionesPrendaId);
             }
 
@@ -103,7 +103,7 @@ public class CarritoService {
     }
 
     public ResumenCarritoDto obtenerResumenDeCarrito(String idUsuario, Long idCarrito) {
-        Carrito carrito = new Carrito();
+        Carrito carrito;
         if (idCarrito == null) {
             carrito = carritoRepository.getAllByUsuarioIdAndEstado(idUsuario, "Nuevo");
         } else {
@@ -112,8 +112,10 @@ public class CarritoService {
         Envios envios = enviosRepository.getAllByCarritoId(carrito.getId());
 
         ResumenCarritoDto resumen = new ResumenCarritoDto();
-        resumen.setEntrega(envios.getFechaEntrega());
-        resumen.setRecoleccion(envios.getFechaRecoleccion());
+        if (envios != null) {
+            resumen.setEntrega(envios.getFechaEntrega());
+            resumen.setRecoleccion(envios.getFechaRecoleccion());
+        }
         resumen.setId(carrito.getId());
         if (carrito.getDireccion() != null) {
             resumen.setDireccion(carrito.getDireccion().getDireccion());
