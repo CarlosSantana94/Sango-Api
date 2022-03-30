@@ -22,10 +22,8 @@ import sango.bucapps.api.Repositorys.DireccionRepository;
 import sango.bucapps.api.Repositorys.EnviosRepository;
 import sango.bucapps.api.Repositorys.UsuarioRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.sql.Date;
+import java.util.*;
 
 @Service
 public class CarritoService {
@@ -88,6 +86,15 @@ public class CarritoService {
             carritoDto.setTotal(total);
             carrito.setTotal(total);
             carritoRepository.save(carrito);
+        } else {
+            carrito = new Carrito();
+            carrito.setEstado("Nuevo");
+            carrito.setTotal(0D);
+            carrito.setUsuario(usuarioRepository.getById(idUsuario));
+
+            Carrito c2 =carritoRepository.save(carrito);
+            carritoDto.setId(c2.getId());
+            carritoDto.setTotal(0D);
         }
 
 
@@ -148,8 +155,10 @@ public class CarritoService {
             }
 
         }
+        resumen.setEstado(carrito.getEstado());
         resumen.setCreado(carrito.getCreado());
         resumen.setTotal(carrito.getTotal());
+        resumen.setFormaDePago(carrito.getFormaDePago());
         resumen.setCantidadPrendas(carrito.getSubOpcionesPrendas().size());
         resumen.setPrendasList(subDtoList);
 
@@ -236,8 +245,6 @@ public class CarritoService {
             carritoRepository.save(carrito);
             obtenerCarritoNuevo(idUsuario);
         }
-
-
         return respuestaDto;
     }
 
@@ -263,7 +270,44 @@ public class CarritoService {
             }
         }
 
+       list.sort(Comparator.comparing(ResumenCarritoDto::getRecoleccion));
+
         return list;
     }
 
+    public List<ResumenCarritoDto> obtenerPedidosPorFechaRepartidor(Date fechaRecoleccion) {
+
+
+        List<ResumenCarritoDto> list = new ArrayList<>();
+
+        List<Carrito> carritos = carritoRepository.obtenerCarritosNoNuevos();
+
+        for (Carrito c : carritos) {
+            ResumenCarritoDto resumenCarritoDto = new ResumenCarritoDto();
+
+
+            Envios envios = enviosRepository.getAllByCarritoId(c.getId());
+
+            resumenCarritoDto.setId(c.getId());
+            resumenCarritoDto.setRecoleccion(envios.getFechaRecoleccion());
+            resumenCarritoDto.setEntrega(envios.getFechaEntrega());
+            resumenCarritoDto.setCantidadPrendas(c.getSubOpcionesPrendas().size());
+            resumenCarritoDto.setTotal(c.getTotal());
+            resumenCarritoDto.setEstado(c.getEstado());
+            resumenCarritoDto.setDireccion(c.getDireccion().getDireccion());
+            resumenCarritoDto.setNombre(c.getDireccion().getNombre());
+            resumenCarritoDto.setTel(c.getDireccion().getTel());
+            resumenCarritoDto.setCreado(c.getCreado());
+            resumenCarritoDto.setFormaDePago(c.getFormaDePago());
+            resumenCarritoDto.setUsuario(c.getUsuario().getToken());
+            resumenCarritoDto.setCuandoEfectivo(c.getCuandoOToken());
+
+            list.add(resumenCarritoDto);
+        }
+
+        list.sort(Comparator.comparing(ResumenCarritoDto::getRecoleccion));
+
+
+        return list;
+    }
 }

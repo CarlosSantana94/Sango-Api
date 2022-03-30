@@ -8,5 +8,5 @@ systemctl start start-api.service
 systemctl enable start-api.service
 systemctl status start-api
 
-view Log
+view Log:
 journalctl -u start-api.service --no-pager -e -f

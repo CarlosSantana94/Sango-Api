@@ -8,6 +8,7 @@ import sango.bucapps.api.Models.DTO.MsgRespuestaDto;
 import sango.bucapps.api.Models.DTO.ResumenCarritoDto;
 import sango.bucapps.api.Services.CarritoService;
 
+import java.sql.Date;
 import java.util.List;
 
 @RestController
@@ -46,7 +47,7 @@ public class CarritoController {
     @PostMapping(value = "/carrito/pagar/{metodo}/{cuandoOToken}")
     public MsgRespuestaDto pagarCarrito(@RequestHeader("idUsuario") String idUsuario,
                                         @PathVariable("metodo") String metodo,
-                                        @PathVariable("metodo") String cuandoOToken
+                                        @PathVariable("cuandoOToken") String cuandoOToken
     ) throws Error {
         return carritoService.pagarCarrito(idUsuario, metodo, cuandoOToken);
     }
@@ -54,6 +55,12 @@ public class CarritoController {
     @GetMapping(value = "/carrito/pedidos")
     public List<ResumenCarritoDto> obtenerPedidos(@RequestHeader("idUsuario") String idUsuario) {
         return carritoService.obtenerPedidos(idUsuario);
+
+    }
+
+    @GetMapping(value = "/carrito/pedidos/repartidor/{fechaRecoleccion}")
+    public List<ResumenCarritoDto> obtenerPedidosPorFechaRepartidor(@PathVariable(name = "fechaRecoleccion") Date fechaRecoleccion) {
+        return carritoService.obtenerPedidosPorFechaRepartidor(fechaRecoleccion);
 
     }
 

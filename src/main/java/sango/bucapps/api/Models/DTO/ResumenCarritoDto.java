@@ -24,4 +24,7 @@ public class ResumenCarritoDto {
     private String estado;
     private Long id;
     private Timestamp creado;
+    private String formaDePago;
+    private String cuandoEfectivo;
+    private String usuario;
 }

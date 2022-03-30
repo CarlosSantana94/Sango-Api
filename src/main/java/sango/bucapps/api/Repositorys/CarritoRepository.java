@@ -61,4 +61,7 @@ public interface CarritoRepository extends JpaRepository<Carrito, Long> {
     Long contarCuantasPrendasPorKiloHay(@Param("carritoId") Long carritoId);
 
     List<Carrito> getAllByUsuarioId(String idUsuario);
+
+    @Query(value = "select * from carrito where estado is distinct from 'Nuevo'", nativeQuery = true)
+    List<Carrito> obtenerCarritosNoNuevos();
 }
