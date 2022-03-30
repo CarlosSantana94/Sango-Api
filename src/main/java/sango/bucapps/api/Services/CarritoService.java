@@ -161,6 +161,7 @@ public class CarritoService {
         resumen.setFormaDePago(carrito.getFormaDePago());
         resumen.setCantidadPrendas(carrito.getSubOpcionesPrendas().size());
         resumen.setPrendasList(subDtoList);
+        resumen.setCuandoEfectivo(carrito.getCuandoOToken());
 
 
         return resumen;
