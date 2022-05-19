@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import sango.bucapps.api.Models.Entity.Carrito;
 
 import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.List;
 
 public interface CarritoRepository extends JpaRepository<Carrito, Long> {
@@ -62,6 +63,11 @@ public interface CarritoRepository extends JpaRepository<Carrito, Long> {
 
     List<Carrito> getAllByUsuarioId(String idUsuario);
 
-    @Query(value = "select * from carrito where estado is distinct from 'Nuevo'", nativeQuery = true)
-    List<Carrito> obtenerCarritosNoNuevos();
+    @Query(value = "select *\n" +
+            "from carrito\n" +
+            "where estado = 'Creada'\n" +
+            " or estado = 'Terminada'" +
+            "  and id in (select id from envios where fecha_recoleccion <= :fechaRecoleccion  " +
+            "order by fecha_recoleccion)", nativeQuery = true)
+    List<Carrito> obtenerCarritosNoNuevos(@Param("fechaRecoleccion") Date fechaRecoleccion);
 }

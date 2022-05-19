@@ -8,19 +8,10 @@ import io.conekta.Order;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sango.bucapps.api.Models.DTO.CarritoDto;
-import sango.bucapps.api.Models.DTO.MsgRespuestaDto;
-import sango.bucapps.api.Models.DTO.ResumenCarritoDto;
-import sango.bucapps.api.Models.DTO.SubOpcionesPrendaDto;
+import sango.bucapps.api.Models.DTO.*;
 import sango.bucapps.api.Models.DTO.conekta.*;
-import sango.bucapps.api.Models.Entity.Carrito;
-import sango.bucapps.api.Models.Entity.Envios;
-import sango.bucapps.api.Models.Entity.SubOpcionesPrenda;
-import sango.bucapps.api.Models.Entity.Usuario;
-import sango.bucapps.api.Repositorys.CarritoRepository;
-import sango.bucapps.api.Repositorys.DireccionRepository;
-import sango.bucapps.api.Repositorys.EnviosRepository;
-import sango.bucapps.api.Repositorys.UsuarioRepository;
+import sango.bucapps.api.Models.Entity.*;
+import sango.bucapps.api.Repositorys.*;
 
 import java.sql.Date;
 import java.util.*;
@@ -38,6 +29,9 @@ public class CarritoService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private ConfirmacionPrendasRepository confirmacionPrendasRepository;
 
     private static final Long ID_KILO_LAVANDERIA = 79L;
 
@@ -92,7 +86,7 @@ public class CarritoService {
             carrito.setTotal(0D);
             carrito.setUsuario(usuarioRepository.getById(idUsuario));
 
-            Carrito c2 =carritoRepository.save(carrito);
+            Carrito c2 = carritoRepository.save(carrito);
             carritoDto.setId(c2.getId());
             carritoDto.setTotal(0D);
         }
@@ -271,7 +265,7 @@ public class CarritoService {
             }
         }
 
-       list.sort(Comparator.comparing(ResumenCarritoDto::getRecoleccion));
+        list.sort(Comparator.comparing(ResumenCarritoDto::getRecoleccion));
 
         return list;
     }
@@ -281,7 +275,7 @@ public class CarritoService {
 
         List<ResumenCarritoDto> list = new ArrayList<>();
 
-        List<Carrito> carritos = carritoRepository.obtenerCarritosNoNuevos();
+        List<Carrito> carritos = carritoRepository.obtenerCarritosNoNuevos(fechaRecoleccion);
 
         for (Carrito c : carritos) {
             ResumenCarritoDto resumenCarritoDto = new ResumenCarritoDto();
@@ -310,5 +304,61 @@ public class CarritoService {
 
 
         return list;
+    }
+
+    public List<ListaDePrendasDTO> confirmarPrendas(Long idCarrito, List<ListaDePrendasDTO> listaDePrendasDTOS) {
+        List<ListaDePrendasDTO> listaDePrendasDTOSActualizada = new ArrayList<>();
+
+        for (ListaDePrendasDTO l : listaDePrendasDTOS) {
+
+            ConfirmacionPrendas prenda = confirmacionPrendasRepository.getAllByIdPrendaAndIdCarrito(l.getId(), idCarrito);
+            if (prenda != null) {
+                //Ya existe registro
+                if (l.getRevisada() != null) {
+                    prenda.setRevisada(l.getRevisada());
+                }
+
+            } else {
+                prenda = new ConfirmacionPrendas();
+                prenda.setCantidad(l.getCantidad());
+                prenda.setIdPrenda(l.getId());
+                prenda.setImg(l.getImg());
+                prenda.setNombre(l.getNombre());
+                prenda.setPrecio(l.getPrecio());
+                prenda.setPrecioTotal(l.getPrecioTotal());
+                prenda.setServicio(l.getServicio());
+                prenda.setIdCarrito(idCarrito);
+                prenda.setRevisada(false);
+            }
+
+            ConfirmacionPrendas conf = confirmacionPrendasRepository.save(prenda);
+            l.setReg(conf.getReg());
+            l.setRevisada(conf.getRevisada());
+
+            listaDePrendasDTOSActualizada.add(l);
+        }
+
+        return listaDePrendasDTOSActualizada;
+    }
+
+    public ConfirmacionPrendas cambiarRegistroValor(Long reg, Boolean registrada) {
+
+        ConfirmacionPrendas prenda = confirmacionPrendasRepository.getAllByReg(reg);
+        prenda.setRevisada(registrada);
+
+        return confirmacionPrendasRepository.save(prenda);
+    }
+
+    public CarritoDto cambiarEstadoCarrito(String estado, Long idCarrito) {
+        Carrito carrito = carritoRepository.getById(idCarrito);
+        carrito.setEstado(estado);
+
+        CarritoDto dto = new CarritoDto();
+        dto.setId(carrito.getId());
+        dto.setEstado(carrito.getEstado());
+
+        carritoRepository.save(carrito);
+
+        return dto;
     }
 }
