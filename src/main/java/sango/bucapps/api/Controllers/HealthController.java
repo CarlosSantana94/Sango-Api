@@ -12,7 +12,7 @@ import java.util.Date;
 @CrossOrigin(maxAge = 3600)
 public class HealthController {
 
-    @GetMapping(value = "/health")
+    @GetMapping(value = "/")
     public HealthDto getHealth() {
 
         HealthDto healthDto = new HealthDto();
