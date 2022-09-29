@@ -13,6 +13,16 @@ import java.util.Date;
 public class HealthController {
 
     @GetMapping(value = "/")
+    public HealthDto getIndexConnection() {
+
+        HealthDto healthDto = new HealthDto();
+        healthDto.setRequestTime(new Date());
+        healthDto.setIsUp(true);
+
+        return healthDto;
+    }
+
+    @GetMapping(value = "/health")
     public HealthDto getHealth() {
 
         HealthDto healthDto = new HealthDto();

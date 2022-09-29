@@ -13,5 +13,6 @@ public class OpcionesPrendaDto {
     private Long id;
     private String nombre;
     private String img;
+    private Long servicioId;
     private List<SubOpcionesPrendaDto> subOpcionesPrenda;
 }

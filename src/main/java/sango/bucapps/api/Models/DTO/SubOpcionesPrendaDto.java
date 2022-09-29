@@ -12,6 +12,7 @@ public class SubOpcionesPrendaDto {
     private String nombre;
     private Double precio;
     private String servicio;
+    private Long opcionId;
     private Double precioTotal;
     private String descripcion;
     private String img;

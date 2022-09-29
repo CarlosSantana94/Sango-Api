@@ -60,9 +60,15 @@ public class CarritoController {
 
     }
 
-    @GetMapping(value = "/carrito/pedidos/repartidor/{fechaRecoleccion}", produces = "application/json")
+    @GetMapping(value = "/carrito/pedidos/repartidor/actuales/{fechaRecoleccion}", produces = "application/json")
     public List<ResumenCarritoDto> obtenerPedidosPorFechaRepartidor(@PathVariable(name = "fechaRecoleccion") Date fechaRecoleccion) {
         return carritoService.obtenerPedidosPorFechaRepartidor(fechaRecoleccion);
+
+    }
+
+    @GetMapping(value = "/carrito/pedidos/repartidor/pendientes/{fechaRecoleccion}", produces = "application/json")
+    public List<ResumenCarritoDto> obtenerPedidosPorFechaRepartidorPendientes(@PathVariable(name = "fechaRecoleccion") Date fechaRecoleccion) {
+        return carritoService.obtenerPedidosPorFechaRepartidorPendientes(fechaRecoleccion);
 
     }
 
@@ -75,22 +81,23 @@ public class CarritoController {
 
 
     @PostMapping(value = "/prendasConfirmar/{idCarrito}", produces = "application/json")
-    public List<ListaDePrendasDTO> confirmarPrendas( @PathVariable("idCarrito") Long idCarrito,
-                                                     @RequestBody List<ListaDePrendasDTO> listaDePrendasDTOS){
+    public List<ListaDePrendasDTO> confirmarPrendas(@PathVariable("idCarrito") Long idCarrito,
+                                                    @RequestBody List<ListaDePrendasDTO> listaDePrendasDTOS) {
 
-        return carritoService.confirmarPrendas(idCarrito,listaDePrendasDTOS);
+        return carritoService.confirmarPrendas(idCarrito, listaDePrendasDTOS);
     }
 
     @PostMapping(value = "/prendaConfirmar/reg/{reg}/{registrada}", produces = "application/json")
     public ConfirmacionPrendas confirmarPrendas(@PathVariable("reg") Long reg,
-                                                @PathVariable("registrada") Boolean registrada){
+                                                @PathVariable("registrada") Boolean registrada) {
 
-        return carritoService.cambiarRegistroValor(reg,registrada);
+        return carritoService.cambiarRegistroValor(reg, registrada);
     }
+
     @PostMapping(value = "/cambiarEstadoCarrito/{estado}/{idCarrito}", produces = "application/json")
     public CarritoDto cambiarEstadoCarrito(@PathVariable("estado") String estado,
-                                        @PathVariable("idCarrito") Long idCarrito){
+                                           @PathVariable("idCarrito") Long idCarrito) {
 
-        return carritoService.cambiarEstadoCarrito(estado,idCarrito);
+        return carritoService.cambiarEstadoCarrito(estado, idCarrito);
     }
 }

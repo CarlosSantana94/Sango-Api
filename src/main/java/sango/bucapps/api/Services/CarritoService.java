@@ -361,4 +361,38 @@ public class CarritoService {
 
         return dto;
     }
+
+    public List<ResumenCarritoDto> obtenerPedidosPorFechaRepartidorPendientes(Date fechaRecoleccion) {
+        List<ResumenCarritoDto> list = new ArrayList<>();
+
+        List<Carrito> carritos = carritoRepository.obtenerCarritosNoNuevosPendientes(fechaRecoleccion);
+
+        for (Carrito c : carritos) {
+            ResumenCarritoDto resumenCarritoDto = new ResumenCarritoDto();
+
+
+            Envios envios = enviosRepository.getAllByCarritoId(c.getId());
+
+            resumenCarritoDto.setId(c.getId());
+            resumenCarritoDto.setRecoleccion(envios.getFechaRecoleccion());
+            resumenCarritoDto.setEntrega(envios.getFechaEntrega());
+            resumenCarritoDto.setCantidadPrendas(c.getSubOpcionesPrendas().size());
+            resumenCarritoDto.setTotal(c.getTotal());
+            resumenCarritoDto.setEstado(c.getEstado());
+            resumenCarritoDto.setDireccion(c.getDireccion().getDireccion());
+            resumenCarritoDto.setNombre(c.getDireccion().getNombre());
+            resumenCarritoDto.setTel(c.getDireccion().getTel());
+            resumenCarritoDto.setCreado(c.getCreado());
+            resumenCarritoDto.setFormaDePago(c.getFormaDePago());
+            resumenCarritoDto.setUsuario(c.getUsuario().getToken());
+            resumenCarritoDto.setCuandoEfectivo(c.getCuandoOToken());
+
+            list.add(resumenCarritoDto);
+        }
+
+        list.sort(Comparator.comparing(ResumenCarritoDto::getRecoleccion));
+
+
+        return list;
+    }
 }

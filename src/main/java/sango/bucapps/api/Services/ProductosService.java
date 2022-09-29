@@ -93,4 +93,29 @@ public class ProductosService {
 
         return respuesta;
     }
+
+    public SubOpcionesPrendaDto crearNuevaSubOpcion(SubOpcionesPrendaDto dto) {
+        SubOpcionesPrenda sub = new SubOpcionesPrenda();
+
+        sub.setNombre(dto.getNombre().trim());
+        sub.setPrecio(dto.getPrecio());
+        sub.setDescripcion(dto.getDescripcion().trim());
+        sub.setImg(dto.getImg());
+        sub.setOpcionesPrenda(opcionesPrendaRepository.getById(dto.getOpcionId()));
+        subOpcionesPrendaRepository.save(sub);
+
+        return dto;
+    }
+
+
+    public OpcionesPrendaDto crearNuevaOpcion(OpcionesPrendaDto dto) {
+        OpcionesPrenda opc = new OpcionesPrenda();
+        opc.setNombre(dto.getNombre().trim());
+        opc.setImg(dto.getImg());
+        opc.setServicio(serviciosRepository.getById(dto.getServicioId()));
+
+        opcionesPrendaRepository.save(opc);
+
+        return dto;
+    }
 }

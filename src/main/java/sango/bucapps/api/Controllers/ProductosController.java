@@ -1,6 +1,7 @@
 package sango.bucapps.api.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sango.bucapps.api.Models.DTO.OpcionesPrendaDto;
 import sango.bucapps.api.Models.DTO.SubOpcionesPrendaDto;
@@ -31,6 +32,18 @@ public class ProductosController {
     @GetMapping(value = "productos")
     private List<SubOpcionesPrendaDto> obtenerTodosLosProductos() {
         return productosService.obtenerTodosLosProductos();
+    }
+
+    @PostMapping(value = "subOpciones", produces = "application/json")
+    @ResponseBody
+    public ResponseEntity<SubOpcionesPrendaDto> crearNuevaSubOpcion(@RequestBody SubOpcionesPrendaDto subOpcionesPrendaDto) {
+        return ResponseEntity.ok(productosService.crearNuevaSubOpcion(subOpcionesPrendaDto));
+    }
+
+    @PostMapping(value = "opciones", produces = "application/json")
+    @ResponseBody
+    public ResponseEntity<OpcionesPrendaDto> crearNuevaOpcion(@RequestBody OpcionesPrendaDto opcionesPrendaDto) {
+        return ResponseEntity.ok(productosService.crearNuevaOpcion(opcionesPrendaDto));
     }
 
 
