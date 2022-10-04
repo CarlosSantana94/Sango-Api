@@ -82,6 +82,7 @@ public class ProductosService {
                     dto.setPrecio(opc.getPrecio());
                     dto.setDescripcion(opc.getDescripcion());
                     dto.setImg(opc.getImg());
+                    dto.setServicioPadre(op.getNombre());
                     dto.setServicio(s.getNombre());
 
                     respuesta.add(dto);
@@ -97,10 +98,15 @@ public class ProductosService {
     public SubOpcionesPrendaDto crearNuevaSubOpcion(SubOpcionesPrendaDto dto) {
         SubOpcionesPrenda sub = new SubOpcionesPrenda();
 
+        if (dto.getNombre().contains(")")) {
+            dto.setNombre(dto.getNombre().split("\\)")[1].trim());
+        }
+
         sub.setNombre(dto.getNombre().trim());
         sub.setPrecio(dto.getPrecio());
         sub.setDescripcion(dto.getDescripcion().trim());
         sub.setImg(dto.getImg());
+        sub.setPorMetro(dto.getPorMetro());
         sub.setOpcionesPrenda(opcionesPrendaRepository.getById(dto.getOpcionId()));
         subOpcionesPrendaRepository.save(sub);
 
@@ -110,6 +116,12 @@ public class ProductosService {
 
     public OpcionesPrendaDto crearNuevaOpcion(OpcionesPrendaDto dto) {
         OpcionesPrenda opc = new OpcionesPrenda();
+
+        if (dto.getNombre().contains(")")) {
+            dto.setNombre(dto.getNombre().split("\\)")[1].trim());
+        }
+
+
         opc.setNombre(dto.getNombre().trim());
         opc.setImg(dto.getImg());
         opc.setServicio(serviciosRepository.getById(dto.getServicioId()));

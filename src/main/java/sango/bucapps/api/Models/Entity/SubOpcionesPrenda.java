@@ -30,4 +30,7 @@ public class SubOpcionesPrenda {
     @JoinColumn(name = "opcion_id")
     @ManyToOne
     private OpcionesPrenda opcionesPrenda;
+
+    @Column
+    private Boolean porMetro;
 }
