@@ -46,5 +46,10 @@ public class ProductosController {
         return ResponseEntity.ok(productosService.crearNuevaOpcion(opcionesPrendaDto));
     }
 
+    @GetMapping(value = "productos/id/{prodId}")
+    private ResponseEntity<SubOpcionesPrendaDto> obtenerProductoPorId(@PathVariable("prodId") Long prodId) {
+        return ResponseEntity.ok(productosService.obtenerProductoPorId(prodId));
+    }
+
 
 }

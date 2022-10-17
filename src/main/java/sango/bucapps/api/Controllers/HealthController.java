@@ -18,6 +18,8 @@ public class HealthController {
         HealthDto healthDto = new HealthDto();
         healthDto.setRequestTime(new Date());
         healthDto.setIsUp(true);
+        healthDto.setAppName("SANGO-API");
+        healthDto.setVersion(2);
 
         return healthDto;
     }
@@ -28,6 +30,8 @@ public class HealthController {
         HealthDto healthDto = new HealthDto();
         healthDto.setRequestTime(new Date());
         healthDto.setIsUp(true);
+        healthDto.setAppName("SANGO-API");
+        healthDto.setVersion(2);
 
         return healthDto;
     }

@@ -13,7 +13,6 @@ import sango.bucapps.api.Repositorys.ServiciosRepository;
 import sango.bucapps.api.Repositorys.SubOpcionesPrendaRepository;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -78,10 +77,11 @@ public class ProductosService {
                 for (SubOpcionesPrenda opc : subOpcionesPrendaRepository.getAllByOpcionesPrendaIdOrderByNombre(op.getId())) {
                     SubOpcionesPrendaDto dto = new SubOpcionesPrendaDto();
                     dto.setId(opc.getId());
-                    dto.setNombre(opc.getNombre());
+                    dto.setNombre(opc.getNombre().trim());
                     dto.setPrecio(opc.getPrecio());
                     dto.setDescripcion(opc.getDescripcion());
                     dto.setImg(opc.getImg());
+                    dto.setPorMetro(opc.getPorMetro());
                     dto.setServicioPadre(op.getNombre());
                     dto.setServicio(s.getNombre());
 
@@ -90,7 +90,7 @@ public class ProductosService {
             }
         }
 
-        Collections.sort(respuesta, Comparator.comparing(SubOpcionesPrendaDto::getNombre));
+        respuesta.sort(Comparator.comparing(SubOpcionesPrendaDto::getNombre));
 
         return respuesta;
     }
@@ -100,6 +100,9 @@ public class ProductosService {
 
         if (dto.getNombre().contains(")")) {
             dto.setNombre(dto.getNombre().split("\\)")[1].trim());
+        }
+        if (dto.getId() != null) {
+            sub.setId(dto.getId());
         }
 
         sub.setNombre(dto.getNombre().trim());
@@ -127,6 +130,25 @@ public class ProductosService {
         opc.setServicio(serviciosRepository.getById(dto.getServicioId()));
 
         opcionesPrendaRepository.save(opc);
+
+        return dto;
+    }
+
+    public SubOpcionesPrendaDto obtenerProductoPorId(Long prodId) {
+        SubOpcionesPrenda sub = subOpcionesPrendaRepository.getById(prodId);
+
+        SubOpcionesPrendaDto dto = new SubOpcionesPrendaDto();
+        dto.setId(sub.getId());
+        dto.setNombre(sub.getNombre());
+        dto.setPrecio(sub.getPrecio());
+        dto.setServicio(sub.getOpcionesPrenda().getServicio().getNombre());
+        dto.setServicioPadre(sub.getOpcionesPrenda().getNombre());
+        dto.setDescripcion(sub.getDescripcion());
+        dto.setImg(sub.getImg());
+        dto.setPorMetro(sub.getPorMetro());
+        dto.setOpcionId(sub.getOpcionesPrenda().getServicio().getId());
+        dto.setOpcionPadreId(sub.getOpcionesPrenda().getId());
+        dto.setServicioPadreImg(sub.getOpcionesPrenda().getImg());
 
         return dto;
     }

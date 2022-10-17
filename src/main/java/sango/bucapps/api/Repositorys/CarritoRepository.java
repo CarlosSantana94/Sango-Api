@@ -58,8 +58,8 @@ public interface CarritoRepository extends JpaRepository<Carrito, Long> {
     @Query(value = "select count(*)\n" +
             "from carrito_sub_opciones_prendas\n" +
             "where carrito_id = :carritoId\n" +
-            "  and sub_opciones_prendas_id = 79", nativeQuery = true)
-    Long contarCuantasPrendasPorKiloHay(@Param("carritoId") Long carritoId);
+            "  and sub_opciones_prendas_id = :prendaporKiloId ", nativeQuery = true)
+    Long contarCuantasPrendasPorKiloHay(@Param("carritoId") Long carritoId, @Param("prendaporKiloId") Long prendaPorKiloId);
 
     List<Carrito> getAllByUsuarioId(String idUsuario);
 

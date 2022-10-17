@@ -9,6 +9,8 @@ import java.util.Date;
 @Getter
 @Setter
 public class HealthDto {
+    private String appName;
     private Date requestTime;
     private Boolean isUp;
+    private Integer version;
 }

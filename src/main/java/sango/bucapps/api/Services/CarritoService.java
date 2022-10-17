@@ -33,14 +33,14 @@ public class CarritoService {
     @Autowired
     private ConfirmacionPrendasRepository confirmacionPrendasRepository;
 
-    private static final Long ID_KILO_LAVANDERIA = 79L;
+    private static final Long ID_KILO_LAVANDERIA = 80L;
 
     public CarritoDto actualizarCarrito(String idUsuario, Long subOpcionesPrendaId, Long agregar) {
         CarritoDto carritoDto = obtenerCarritoNuevo(idUsuario);
         if (agregar == 1) {
             // Agregar prenda
             if (Objects.equals(subOpcionesPrendaId, ID_KILO_LAVANDERIA)
-                    && carritoRepository.contarCuantasPrendasPorKiloHay(carritoDto.getId()) == 0) {
+                    && carritoRepository.contarCuantasPrendasPorKiloHay(carritoDto.getId(), ID_KILO_LAVANDERIA) == 0) {
                 for (int i = 0; i < 4; i++) {
                     carritoRepository.insertarPrendaEnCarrito(carritoDto.getId(), ID_KILO_LAVANDERIA);
                 }
@@ -52,7 +52,7 @@ public class CarritoService {
         } else if (agregar == 0) {
             // Quitar Prenda
             if (Objects.equals(subOpcionesPrendaId, ID_KILO_LAVANDERIA)
-                    && carritoRepository.contarCuantasPrendasPorKiloHay(carritoDto.getId()) <= 4) {
+                    && carritoRepository.contarCuantasPrendasPorKiloHay(carritoDto.getId(),ID_KILO_LAVANDERIA) <= 4) {
                 carritoRepository.borrarPrendaEnCarritoPorKiloMenorA4(carritoDto.getId(), ID_KILO_LAVANDERIA);
             } else {
                 carritoRepository.borrarPrendaEnCarrito(carritoDto.getId(), subOpcionesPrendaId);
