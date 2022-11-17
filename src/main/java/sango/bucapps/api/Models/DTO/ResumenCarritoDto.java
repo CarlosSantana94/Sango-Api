@@ -27,4 +27,6 @@ public class ResumenCarritoDto {
     private String formaDePago;
     private String cuandoEfectivo;
     private String usuario;
+    private Double lat;
+    private Double lng;
 }

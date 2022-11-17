@@ -77,4 +77,23 @@ public interface CarritoRepository extends JpaRepository<Carrito, Long> {
             "  and id in (select carrito_id from envios where fecha_recoleccion >= :fechaRecoleccion  " +
             "order by fecha_recoleccion)", nativeQuery = true)
     List<Carrito> obtenerCarritosNoNuevosPendientes(@Param("fechaRecoleccion") Date fechaRecoleccion);
+
+
+    @Query(value = "select *\n" +
+            "from carrito\n" +
+            "where (estado = 'Recolectada')", nativeQuery = true)
+    List<Carrito> obtenerCarritosRecolectados();
+
+    @Query(value = "select *\n" +
+            "from carrito\n" +
+            "where (estado = 'Entrega')", nativeQuery = true)
+    List<Carrito> obtenerCarritosParaEntrega();
+
+
+    @Query(value = "select *\n" +
+            "from carrito\n" +
+            "where (estado = 'Creada' or estado = 'Entrega')\n" +
+            "  and id in (select carrito_id from envios where fecha_recoleccion <= :fechaRecoleccion order by fecha_recoleccion)\n"
+            , nativeQuery = true)
+    List<Carrito> obtenerCarritosRepartidor(@Param("fechaRecoleccion") Date fechaRecoleccion);
 }

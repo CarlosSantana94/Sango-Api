@@ -66,6 +66,26 @@ public class CarritoController {
 
     }
 
+    @GetMapping(value = "/carrito/pedidos/repartidor/enTienda", produces = "application/json")
+    public List<ResumenCarritoDto> obtenerCarritosRecolectados() {
+        return carritoService.obtenerCarritosRecolectados();
+
+    }
+
+    @GetMapping(value = "/carrito/pedidos/repartidor/paraEntrega", produces = "application/json")
+    public List<ResumenCarritoDto> obtenerCarritosParaEntrega() {
+        return carritoService.obtenerCarritosParaEntrega();
+
+    }
+
+
+
+    @GetMapping(value = "/carrito/pedidos/repartidor/paraRepartidor/{fechaRecoleccion}", produces = "application/json")
+    public List<ResumenCarritoDto> obtenerCarritosParaRepartidor(@PathVariable(name = "fechaRecoleccion") Date fechaRecoleccion) {
+        return carritoService.obtenerCarritosParaRepartidor(fechaRecoleccion);
+
+    }
+
     @GetMapping(value = "/carrito/pedidos/repartidor/pendientes/{fechaRecoleccion}", produces = "application/json")
     public List<ResumenCarritoDto> obtenerPedidosPorFechaRepartidorPendientes(@PathVariable(name = "fechaRecoleccion") Date fechaRecoleccion) {
         return carritoService.obtenerPedidosPorFechaRepartidorPendientes(fechaRecoleccion);

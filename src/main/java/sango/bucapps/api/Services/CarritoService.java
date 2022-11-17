@@ -52,7 +52,7 @@ public class CarritoService {
         } else if (agregar == 0) {
             // Quitar Prenda
             if (Objects.equals(subOpcionesPrendaId, ID_KILO_LAVANDERIA)
-                    && carritoRepository.contarCuantasPrendasPorKiloHay(carritoDto.getId(),ID_KILO_LAVANDERIA) <= 4) {
+                    && carritoRepository.contarCuantasPrendasPorKiloHay(carritoDto.getId(), ID_KILO_LAVANDERIA) <= 4) {
                 carritoRepository.borrarPrendaEnCarritoPorKiloMenorA4(carritoDto.getId(), ID_KILO_LAVANDERIA);
             } else {
                 carritoRepository.borrarPrendaEnCarrito(carritoDto.getId(), subOpcionesPrendaId);
@@ -270,40 +270,12 @@ public class CarritoService {
         return list;
     }
 
+    public List<ResumenCarritoDto> obtenerCarritosRecolectados() {
+        return listarYCompararPorFecha(carritoRepository.obtenerCarritosRecolectados());
+    }
+
     public List<ResumenCarritoDto> obtenerPedidosPorFechaRepartidor(Date fechaRecoleccion) {
-
-
-        List<ResumenCarritoDto> list = new ArrayList<>();
-
-        List<Carrito> carritos = carritoRepository.obtenerCarritosNoNuevos(fechaRecoleccion);
-
-        for (Carrito c : carritos) {
-            ResumenCarritoDto resumenCarritoDto = new ResumenCarritoDto();
-
-
-            Envios envios = enviosRepository.getAllByCarritoId(c.getId());
-
-            resumenCarritoDto.setId(c.getId());
-            resumenCarritoDto.setRecoleccion(envios.getFechaRecoleccion());
-            resumenCarritoDto.setEntrega(envios.getFechaEntrega());
-            resumenCarritoDto.setCantidadPrendas(c.getSubOpcionesPrendas().size());
-            resumenCarritoDto.setTotal(c.getTotal());
-            resumenCarritoDto.setEstado(c.getEstado());
-            resumenCarritoDto.setDireccion(c.getDireccion().getDireccion());
-            resumenCarritoDto.setNombre(c.getDireccion().getNombre());
-            resumenCarritoDto.setTel(c.getDireccion().getTel());
-            resumenCarritoDto.setCreado(c.getCreado());
-            resumenCarritoDto.setFormaDePago(c.getFormaDePago());
-            resumenCarritoDto.setUsuario(c.getUsuario().getToken());
-            resumenCarritoDto.setCuandoEfectivo(c.getCuandoOToken());
-
-            list.add(resumenCarritoDto);
-        }
-
-        list.sort(Comparator.comparing(ResumenCarritoDto::getRecoleccion));
-
-
-        return list;
+        return listarYCompararPorFecha(carritoRepository.obtenerCarritosNoNuevos(fechaRecoleccion));
     }
 
     public List<ListaDePrendasDTO> confirmarPrendas(Long idCarrito, List<ListaDePrendasDTO> listaDePrendasDTOS) {
@@ -363,10 +335,16 @@ public class CarritoService {
     }
 
     public List<ResumenCarritoDto> obtenerPedidosPorFechaRepartidorPendientes(Date fechaRecoleccion) {
+        return listarYCompararPorFecha(carritoRepository.obtenerCarritosNoNuevosPendientes(fechaRecoleccion));
+    }
+
+    public List<ResumenCarritoDto> obtenerCarritosParaEntrega() {
+        return listarYCompararPorFecha(carritoRepository.obtenerCarritosParaEntrega());
+    }
+
+
+    private List<ResumenCarritoDto> listarYCompararPorFecha(List<Carrito> carritos) {
         List<ResumenCarritoDto> list = new ArrayList<>();
-
-        List<Carrito> carritos = carritoRepository.obtenerCarritosNoNuevosPendientes(fechaRecoleccion);
-
         for (Carrito c : carritos) {
             ResumenCarritoDto resumenCarritoDto = new ResumenCarritoDto();
 
@@ -386,13 +364,18 @@ public class CarritoService {
             resumenCarritoDto.setFormaDePago(c.getFormaDePago());
             resumenCarritoDto.setUsuario(c.getUsuario().getToken());
             resumenCarritoDto.setCuandoEfectivo(c.getCuandoOToken());
+            resumenCarritoDto.setLat(c.getDireccion().getLat());
+            resumenCarritoDto.setLng(c.getDireccion().getLng());
 
             list.add(resumenCarritoDto);
         }
 
         list.sort(Comparator.comparing(ResumenCarritoDto::getRecoleccion));
 
-
         return list;
+    }
+
+    public List<ResumenCarritoDto> obtenerCarritosParaRepartidor(Date fechaRecoleccion) {
+        return listarYCompararPorFecha(carritoRepository.obtenerCarritosRepartidor(fechaRecoleccion));
     }
 }
