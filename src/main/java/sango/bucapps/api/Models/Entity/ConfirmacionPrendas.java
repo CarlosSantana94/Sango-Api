@@ -17,7 +17,11 @@ public class ConfirmacionPrendas {
 
 
     private Long cantidad;
-    private Long idPrenda;
+
+    @ManyToOne()
+    @JoinColumn(name = "id_prenda")
+    private SubOpcionesPrenda subOpcionesPrenda;
+
     private String img;
     private String nombre;
     private Double precio;
@@ -25,4 +29,5 @@ public class ConfirmacionPrendas {
     private String servicio;
     private Boolean revisada;
     private Long idCarrito;
+    private String commentario;
 }

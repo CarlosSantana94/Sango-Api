@@ -8,7 +8,7 @@ public class ApiApplication {
 
     public static void main(String[] args) {
 
-        System.setProperty("spring.main.lazy-initialization", "true");
+      //  System.setProperty("spring.main.lazy-initialization", "true");
         SpringApplication.run(ApiApplication.class, args);
     }
 

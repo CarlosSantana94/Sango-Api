@@ -15,4 +15,6 @@ public class ListaDePrendasDTO {
     private Double precioTotal;
     private String servicio;
     private Boolean revisada;
+    private String comentario;
+    private String padre;
 }

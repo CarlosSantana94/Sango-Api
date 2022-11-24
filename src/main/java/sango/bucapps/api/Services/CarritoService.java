@@ -31,6 +31,9 @@ public class CarritoService {
     private UsuarioRepository usuarioRepository;
 
     @Autowired
+    private SubOpcionesPrendaRepository subOpcionesPrendaRepository;
+
+    @Autowired
     private ConfirmacionPrendasRepository confirmacionPrendasRepository;
 
     private static final Long ID_KILO_LAVANDERIA = 80L;
@@ -283,7 +286,7 @@ public class CarritoService {
 
         for (ListaDePrendasDTO l : listaDePrendasDTOS) {
 
-            ConfirmacionPrendas prenda = confirmacionPrendasRepository.getAllByIdPrendaAndIdCarrito(l.getId(), idCarrito);
+            ConfirmacionPrendas prenda = confirmacionPrendasRepository.getAllBySubOpcionesPrendaIdAndIdCarrito(l.getId(), idCarrito);
             if (prenda != null) {
                 //Ya existe registro
                 if (l.getRevisada() != null) {
@@ -293,7 +296,7 @@ public class CarritoService {
             } else {
                 prenda = new ConfirmacionPrendas();
                 prenda.setCantidad(l.getCantidad());
-                prenda.setIdPrenda(l.getId());
+                prenda.setSubOpcionesPrenda(subOpcionesPrendaRepository.getById(l.getId()));
                 prenda.setImg(l.getImg());
                 prenda.setNombre(l.getNombre());
                 prenda.setPrecio(l.getPrecio());
@@ -306,6 +309,8 @@ public class CarritoService {
             ConfirmacionPrendas conf = confirmacionPrendasRepository.save(prenda);
             l.setReg(conf.getReg());
             l.setRevisada(conf.getRevisada());
+            l.setComentario(conf.getCommentario());
+            l.setPadre(conf.getSubOpcionesPrenda().getOpcionesPrenda().getNombre());
 
             listaDePrendasDTOSActualizada.add(l);
         }
@@ -377,5 +382,15 @@ public class CarritoService {
 
     public List<ResumenCarritoDto> obtenerCarritosParaRepartidor(Date fechaRecoleccion) {
         return listarYCompararPorFecha(carritoRepository.obtenerCarritosRepartidor(fechaRecoleccion));
+    }
+
+    public ListaDePrendasDTO comentarPrenda(Long registro, ListaDePrendasDTO listaDePrendasDTO) {
+
+        ConfirmacionPrendas prenda = confirmacionPrendasRepository.getAllByReg(registro);
+        prenda.setCommentario(listaDePrendasDTO.getComentario());
+
+        confirmacionPrendasRepository.save(prenda);
+
+        return listaDePrendasDTO;
     }
 }

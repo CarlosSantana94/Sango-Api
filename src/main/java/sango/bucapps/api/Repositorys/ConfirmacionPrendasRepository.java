@@ -6,7 +6,7 @@ import sango.bucapps.api.Models.Entity.ConfirmacionPrendas;
 public interface ConfirmacionPrendasRepository extends JpaRepository<ConfirmacionPrendas, Long> {
 
 
-    ConfirmacionPrendas getAllByIdPrendaAndIdCarrito(Long id, Long idCarrito);
+    ConfirmacionPrendas getAllBySubOpcionesPrendaIdAndIdCarrito(Long id, Long idCarrito);
 
     ConfirmacionPrendas getAllByReg(Long reg);
 }

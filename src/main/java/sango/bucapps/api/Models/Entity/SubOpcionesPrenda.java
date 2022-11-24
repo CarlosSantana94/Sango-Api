@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -33,4 +34,9 @@ public class SubOpcionesPrenda {
 
     @Column
     private Boolean porMetro;
+
+    @OneToMany(mappedBy = "subOpcionesPrenda", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ConfirmacionPrendas> confirmacionPrendas;
+
+
 }

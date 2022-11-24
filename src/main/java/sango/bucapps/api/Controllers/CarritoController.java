@@ -2,6 +2,7 @@ package sango.bucapps.api.Controllers;
 
 import io.conekta.Error;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sango.bucapps.api.Models.DTO.CarritoDto;
 import sango.bucapps.api.Models.DTO.ListaDePrendasDTO;
@@ -79,7 +80,6 @@ public class CarritoController {
     }
 
 
-
     @GetMapping(value = "/carrito/pedidos/repartidor/paraRepartidor/{fechaRecoleccion}", produces = "application/json")
     public List<ResumenCarritoDto> obtenerCarritosParaRepartidor(@PathVariable(name = "fechaRecoleccion") Date fechaRecoleccion) {
         return carritoService.obtenerCarritosParaRepartidor(fechaRecoleccion);
@@ -112,6 +112,14 @@ public class CarritoController {
                                                 @PathVariable("registrada") Boolean registrada) {
 
         return carritoService.cambiarRegistroValor(reg, registrada);
+    }
+
+
+    @PostMapping(value = "/prendaConfirmar/comentar/{reg}", produces = "application/json")
+    public ResponseEntity<ListaDePrendasDTO> comentarPrenda(@RequestBody ListaDePrendasDTO listaDePrendasDTO,
+                                                            @PathVariable("reg") Long reg) {
+
+        return ResponseEntity.ok(carritoService.comentarPrenda(reg, listaDePrendasDTO));
     }
 
     @PostMapping(value = "/cambiarEstadoCarrito/{estado}/{idCarrito}", produces = "application/json")
