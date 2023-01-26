@@ -29,4 +29,6 @@ public class ResumenCarritoDto {
     private String usuario;
     private Double lat;
     private Double lng;
+    private String nombreRepartidor;
+    private Long idRepartidor;
 }

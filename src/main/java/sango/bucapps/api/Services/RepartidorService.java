@@ -3,7 +3,9 @@ package sango.bucapps.api.Services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sango.bucapps.api.Models.DTO.RepartidorDto;
+import sango.bucapps.api.Models.Entity.ComentarioChoferes;
 import sango.bucapps.api.Models.Entity.Repartidor;
+import sango.bucapps.api.Repositorys.ComentarioChoferesRepository;
 import sango.bucapps.api.Repositorys.RepartidorRepository;
 
 import java.sql.Date;
@@ -17,6 +19,9 @@ public class RepartidorService {
 
     @Autowired
     private RepartidorRepository repartidorRepository;
+
+    @Autowired
+    private ComentarioChoferesRepository comentarioChoferesRepository;
 
     public Repartidor guardarUbicacionRepartidor(Repartidor repartidor) {
         return repartidorRepository.save(repartidor);
@@ -54,4 +59,15 @@ public class RepartidorService {
         return markers;
     }
 
+    public ComentarioChoferes nuevoComentarioChofer(ComentarioChoferes comentarioChoferes) {
+        return comentarioChoferesRepository.save(comentarioChoferes);
+    }
+
+    public List<ComentarioChoferes> obtenerComentarios() {
+        return comentarioChoferesRepository.findAll();
+    }
+
+    public ComentarioChoferes obtenerComentarioExistentePorCarritoId(Long idCarrito) {
+        return comentarioChoferesRepository.getAllByIdCarrito(idCarrito);
+    }
 }

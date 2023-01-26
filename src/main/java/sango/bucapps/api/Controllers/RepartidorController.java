@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import sango.bucapps.api.Models.DTO.RepartidorDto;
+import sango.bucapps.api.Models.Entity.ComentarioChoferes;
 import sango.bucapps.api.Models.Entity.Repartidor;
 import sango.bucapps.api.Services.RepartidorService;
 
@@ -28,5 +29,25 @@ public class RepartidorController {
     public ResponseEntity<List<RepartidorDto>> obtenerRutaRepartidorPorDia(@PathVariable(name = "fechaRecoleccion") Date fechaRecoleccion) {
         return ResponseEntity.ok(repartidorService.obtenerRutaRepartidorPorDia(fechaRecoleccion));
 
+    }
+
+    @PostMapping(value = "repartidor/comentario", produces = "application/json")
+    @ResponseBody
+    public ResponseEntity<ComentarioChoferes> nuevoComentarioChofer(@RequestBody ComentarioChoferes comentarioChoferes) {
+        return ResponseEntity.ok(repartidorService.nuevoComentarioChofer(comentarioChoferes));
+    }
+
+
+    @GetMapping(value = "repartidor/comentario", produces = "application/json")
+    @ResponseBody
+    public ResponseEntity<List<ComentarioChoferes>> obtenerComentarios() {
+        return ResponseEntity.ok(repartidorService.obtenerComentarios());
+    }
+
+    @GetMapping(value = "repartidor/comentario/existente/{idCarrito}", produces = "application/json")
+    @ResponseBody
+    public ResponseEntity<ComentarioChoferes> obtenerComentarioExistentePorCarritoId
+            (@PathVariable(name = "idCarrito") Long idCarrito) {
+        return ResponseEntity.ok(repartidorService.obtenerComentarioExistentePorCarritoId(idCarrito));
     }
 }
