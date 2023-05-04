@@ -19,7 +19,7 @@ public class HealthController {
         healthDto.setRequestTime(new Date());
         healthDto.setIsUp(true);
         healthDto.setAppName("SANGO-API");
-        healthDto.setVersion(8);
+        healthDto.setVersion(9);
 
         return healthDto;
     }
@@ -31,7 +31,7 @@ public class HealthController {
         healthDto.setRequestTime(new Date());
         healthDto.setIsUp(true);
         healthDto.setAppName("SANGO-API");
-        healthDto.setVersion(8);
+        healthDto.setVersion(9);
 
         return healthDto;
     }
