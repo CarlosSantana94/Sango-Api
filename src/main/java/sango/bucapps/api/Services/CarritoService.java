@@ -36,7 +36,7 @@ public class CarritoService {
     @Autowired
     private ConfirmacionPrendasRepository confirmacionPrendasRepository;
 
-    private static final Long ID_KILO_LAVANDERIA = 80L;
+    private static final Long ID_KILO_LAVANDERIA = 1L;
 
     public CarritoDto actualizarCarrito(String idUsuario, Long subOpcionesPrendaId, Long agregar) {
         CarritoDto carritoDto = obtenerCarritoNuevo(idUsuario);
