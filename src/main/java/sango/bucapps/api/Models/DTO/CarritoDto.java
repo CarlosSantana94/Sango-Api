@@ -23,5 +23,5 @@ public class CarritoDto {
     private Date recoleccion;
     private Date entrega;
     private List<SubOpcionesPrendaDto> subOpcionesPrendas;
-
+    private String motivoCancelacion;
 }

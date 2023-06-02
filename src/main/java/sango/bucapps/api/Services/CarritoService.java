@@ -339,6 +339,8 @@ public class CarritoService {
         return dto;
     }
 
+
+
     public List<ResumenCarritoDto> obtenerPedidosPorFechaRepartidorPendientes(Date fechaRecoleccion) {
         return listarYCompararPorFecha(carritoRepository.obtenerCarritosNoNuevosPendientes(fechaRecoleccion));
     }
@@ -392,5 +394,15 @@ public class CarritoService {
         confirmacionPrendasRepository.save(prenda);
 
         return listaDePrendasDTO;
+    }
+
+    public CarritoDto solicitarCancelacion(CarritoDto carritoDto) {
+        Carrito carrito = carritoRepository.getById(carritoDto.getId());
+        carrito.setEstado(carritoDto.getEstado());
+        carrito.setMotivoCancelacion(carritoDto.getMotivoCancelacion());
+
+        carritoRepository.save(carrito);
+
+        return carritoDto;
     }
 }

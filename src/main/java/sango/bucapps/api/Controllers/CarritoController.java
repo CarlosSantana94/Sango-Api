@@ -128,4 +128,10 @@ public class CarritoController {
 
         return carritoService.cambiarEstadoCarrito(estado, idCarrito);
     }
+
+    @PostMapping(value = "/solicitarCancelacion", produces = "application/json")
+    public CarritoDto solicitarCancelacion(@RequestBody CarritoDto carrito) {
+
+        return carritoService.solicitarCancelacion(carrito);
+    }
 }

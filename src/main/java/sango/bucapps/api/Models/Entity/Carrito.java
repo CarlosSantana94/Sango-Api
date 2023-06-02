@@ -46,5 +46,8 @@ public class Carrito {
     @ManyToMany(fetch = FetchType.LAZY)
     private List<SubOpcionesPrenda> subOpcionesPrendas;
 
+    @Column
+    private String motivoCancelacion;
+
 
 }
