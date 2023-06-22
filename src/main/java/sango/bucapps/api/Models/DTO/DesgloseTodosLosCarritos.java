@@ -30,7 +30,6 @@ public class DesgloseTodosLosCarritos {
         solicitudCancelacion = 0L;
         finalizados = 0L;
         enTienda = 0L;
-
     }
 
 }

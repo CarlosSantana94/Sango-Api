@@ -479,4 +479,9 @@ public class CarritoService {
 
         return desgloseTodosLosCarritos;
     }
+
+    public List<Carrito> obtenerCarritoPorEstado(String estado) {
+        List<Carrito> carritos = carritoRepository.getAllByEstado(estado);
+        return carritos;
+    }
 }

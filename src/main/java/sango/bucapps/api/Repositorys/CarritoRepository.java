@@ -96,4 +96,7 @@ public interface CarritoRepository extends JpaRepository<Carrito, Long> {
             "  and id in (select carrito_id from envios where fecha_recoleccion <= :fechaRecoleccion order by fecha_recoleccion)\n"
             , nativeQuery = true)
     List<Carrito> obtenerCarritosRepartidor(@Param("fechaRecoleccion") Date fechaRecoleccion);
+
+    @Query(value = "select * from carrito where estado = :estado", nativeQuery = true)
+    List<Carrito> getAllByEstado(@Param("estado") String estado);
 }

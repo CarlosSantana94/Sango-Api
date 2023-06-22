@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sango.bucapps.api.Models.DTO.*;
+import sango.bucapps.api.Models.Entity.Carrito;
 import sango.bucapps.api.Models.Entity.ConfirmacionPrendas;
 import sango.bucapps.api.Services.CarritoService;
 
@@ -136,4 +137,11 @@ public class CarritoController {
     public ResponseEntity<DesgloseTodosLosCarritos> obtenerDesgloseDeCarritos(){
         return ResponseEntity.ok(carritoService.obtenerDesgloseDeCarritos());
     }
+
+    @GetMapping(value = "/estado/{estado}")
+    public ResponseEntity<List<Carrito>> obtenerCarritoPorEstado(@PathVariable("estado") String estado){
+        return ResponseEntity.ok(carritoService.obtenerCarritoPorEstado(estado));
+    }
+
+
 }
