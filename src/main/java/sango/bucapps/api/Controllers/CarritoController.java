@@ -4,10 +4,7 @@ import io.conekta.Error;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sango.bucapps.api.Models.DTO.CarritoDto;
-import sango.bucapps.api.Models.DTO.ListaDePrendasDTO;
-import sango.bucapps.api.Models.DTO.MsgRespuestaDto;
-import sango.bucapps.api.Models.DTO.ResumenCarritoDto;
+import sango.bucapps.api.Models.DTO.*;
 import sango.bucapps.api.Models.Entity.ConfirmacionPrendas;
 import sango.bucapps.api.Services.CarritoService;
 
@@ -133,5 +130,10 @@ public class CarritoController {
     public CarritoDto solicitarCancelacion(@RequestBody CarritoDto carrito) {
 
         return carritoService.solicitarCancelacion(carrito);
+    }
+
+    @GetMapping(value = "/desgloseTodosLosPedidos")
+    public ResponseEntity<DesgloseTodosLosCarritos> obtenerDesgloseDeCarritos(){
+        return ResponseEntity.ok(carritoService.obtenerDesgloseDeCarritos());
     }
 }

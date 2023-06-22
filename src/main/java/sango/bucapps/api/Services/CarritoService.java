@@ -14,6 +14,7 @@ import sango.bucapps.api.Models.Entity.*;
 import sango.bucapps.api.Repositorys.*;
 
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -340,7 +341,6 @@ public class CarritoService {
     }
 
 
-
     public List<ResumenCarritoDto> obtenerPedidosPorFechaRepartidorPendientes(Date fechaRecoleccion) {
         return listarYCompararPorFecha(carritoRepository.obtenerCarritosNoNuevosPendientes(fechaRecoleccion));
     }
@@ -404,5 +404,79 @@ public class CarritoService {
         carritoRepository.save(carrito);
 
         return carritoDto;
+    }
+
+    public DesgloseTodosLosCarritos obtenerDesgloseDeCarritos() {
+        List<Carrito> carritos = carritoRepository.findAll();
+        List<Envios> envios = enviosRepository.findAll();
+
+        DesgloseTodosLosCarritos desgloseTodosLosCarritos = new DesgloseTodosLosCarritos();
+
+        for (Carrito c : carritos) {
+
+            Envios e = envios.stream()
+                    .filter(env -> c.getId().equals(env.getCarrito().getId()))
+                    .findAny().orElse(null);
+
+            if (e != null) {
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+                Calendar today = new GregorianCalendar();
+                today.setTime(e.getFechaRecoleccion());
+                today.set(Calendar.MILLISECOND, 0);
+                today.set(Calendar.SECOND, 0);
+                today.set(Calendar.MINUTE, 0);
+                today.set(Calendar.HOUR, 0);
+
+                Calendar cal = new GregorianCalendar();
+                cal.setTime(e.getFechaRecoleccion());
+                cal.set(Calendar.MILLISECOND, 0);
+                cal.set(Calendar.SECOND, 0);
+                cal.set(Calendar.MINUTE, 0);
+                cal.set(Calendar.HOUR, 0);
+
+                switch (c.getEstado()) {
+                    case "Creada":
+                        if (cal.before(today)) {
+                            //PASADO
+                            desgloseTodosLosCarritos.setRecolectarAtrasados(desgloseTodosLosCarritos.getRecolectarAtrasados() + 1);
+                        } else if (cal.after(today)) {
+                            //FUTURO
+                            desgloseTodosLosCarritos.setRecolectarFuturos(desgloseTodosLosCarritos.getRecolectarFuturos() + 1);
+                        } else if (cal.equals(today)) {
+                            //HOY
+                            desgloseTodosLosCarritos.setRecolectarHoy(desgloseTodosLosCarritos.getRecolectarHoy() + 1);
+                        }
+                        break;
+                    case "Recolectada":
+                        desgloseTodosLosCarritos.setEnTienda(desgloseTodosLosCarritos.getEnTienda() + 1);
+                        break;
+                    case "Entrega":
+                        if (cal.before(today)) {
+                            //PASADO
+                            desgloseTodosLosCarritos.setEntregarAtrasados(desgloseTodosLosCarritos.getEntregarAtrasados() + 1);
+                        } else if (cal.after(today)) {
+                            //FUTURO
+                            desgloseTodosLosCarritos.setEntregarFuturos(desgloseTodosLosCarritos.getEntregarFuturos() + 1);
+                        } else if (cal.equals(today)) {
+                            //HOY
+                            desgloseTodosLosCarritos.setEntregarHoy(desgloseTodosLosCarritos.getEntregarHoy() + 1);
+                        }
+                        break;
+                    case "Finalizada":
+                        desgloseTodosLosCarritos.setFinalizados(desgloseTodosLosCarritos.getFinalizados() + 1);
+                        break;
+                    case "SolicitaCancelacion":
+                        desgloseTodosLosCarritos.setSolicitudCancelacion(desgloseTodosLosCarritos.getSolicitudCancelacion() + 1);
+                        break;
+                    case "Cancelada":
+                        desgloseTodosLosCarritos.setCanceladosHistorico(desgloseTodosLosCarritos.getCanceladosHistorico() + 1);
+                        break;
+
+                }
+            }
+        }
+
+        return desgloseTodosLosCarritos;
     }
 }
