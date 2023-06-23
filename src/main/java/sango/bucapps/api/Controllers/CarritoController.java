@@ -139,7 +139,7 @@ public class CarritoController {
     }
 
     @GetMapping(value = "/estado/{estado}")
-    public ResponseEntity<List<Carrito>> obtenerCarritoPorEstado(@PathVariable("estado") String estado){
+    public ResponseEntity<List<CarritoDto>> obtenerCarritoPorEstado(@PathVariable("estado") String estado){
         return ResponseEntity.ok(carritoService.obtenerCarritoPorEstado(estado));
     }
 

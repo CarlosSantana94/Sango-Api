@@ -480,8 +480,20 @@ public class CarritoService {
         return desgloseTodosLosCarritos;
     }
 
-    public List<Carrito> obtenerCarritoPorEstado(String estado) {
+    public List<CarritoDto> obtenerCarritoPorEstado(String estado) {
         List<Carrito> carritos = carritoRepository.getAllByEstado(estado);
-        return carritos;
+        List<CarritoDto> carritoDtos = new ArrayList<>();
+
+        for (Carrito c : carritos) {
+            CarritoDto dto = new CarritoDto();
+            dto.setId(c.getId());
+            dto.setTotal(c.getTotal());
+            dto.setMotivoCancelacion(c.getMotivoCancelacion());
+            dto.setCantidad(Long.valueOf(c.getSubOpcionesPrendas().size()));
+
+            carritoDtos.add(dto);
+        }
+
+        return carritoDtos;
     }
 }
