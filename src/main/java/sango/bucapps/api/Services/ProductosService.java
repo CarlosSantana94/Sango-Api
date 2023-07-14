@@ -110,7 +110,11 @@ public class ProductosService {
         sub.setDescripcion(dto.getDescripcion().trim());
         sub.setImg(dto.getImg());
         sub.setPorMetro(dto.getPorMetro());
-        sub.setOpcionesPrenda(opcionesPrendaRepository.getById(dto.getOpcionId()));
+
+        OpcionesPrenda opcionesPrenda = opcionesPrendaRepository.getById(dto.getOpcionId());
+
+        sub.setOpcionesPrenda(opcionesPrenda);
+
         subOpcionesPrendaRepository.save(sub);
 
         return dto;
