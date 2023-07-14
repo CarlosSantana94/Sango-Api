@@ -11,6 +11,7 @@ import java.util.Date;
 public class HealthDto {
     private String appName;
     private Date requestTime;
+    private Date buildTime;
     private Boolean isUp;
     private Integer version;
 }
