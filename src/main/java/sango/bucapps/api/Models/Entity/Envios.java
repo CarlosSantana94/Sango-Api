@@ -29,4 +29,14 @@ public class Envios {
 
     @Column
     private Date fechaCreado;
+
+    @Column
+    private Date fechaOriginalRecoleccion;
+
+    @Column
+    private Date FechaOriginalEntrega;
+
+    @Column
+    private String motivoModificacion;
+
 }

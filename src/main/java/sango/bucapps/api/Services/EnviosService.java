@@ -82,4 +82,24 @@ public class EnviosService {
 
         return envios;
     }
+
+    public Envios guardarEnvioEnCarritoCreado(Date fechaRecoleccion, Date fechaEntrega, Long idCarrito, String motivo) {
+
+        Carrito carrito = carritoRepository.getById(idCarrito);
+        Envios envios = enviosRepository.getAllByCarritoId(idCarrito);
+        if (envios == null) {
+            envios = new Envios();
+        }
+        envios.setFechaOriginalEntrega(envios.getFechaEntrega());
+        envios.setFechaOriginalRecoleccion(envios.getFechaRecoleccion());
+        envios.setFechaRecoleccion(fechaRecoleccion);
+        envios.setFechaEntrega(fechaEntrega);
+        envios.setCarrito(carrito);
+        envios.setMotivoModificacion(motivo);
+        envios.setFechaCreado(new Date(new java.util.Date().getTime()));
+
+        enviosRepository.save(envios);
+
+        return envios;
+    }
 }

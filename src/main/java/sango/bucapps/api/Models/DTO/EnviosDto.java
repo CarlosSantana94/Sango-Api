@@ -13,4 +13,6 @@ import java.sql.Date;
 public class EnviosDto {
     private Date fecha;
     private Long disponibles;
+
+    private String motivo;
 }

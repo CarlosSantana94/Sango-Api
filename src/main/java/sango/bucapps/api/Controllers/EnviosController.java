@@ -1,6 +1,7 @@
 package sango.bucapps.api.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sango.bucapps.api.Models.DTO.EnviosDto;
 import sango.bucapps.api.Models.Entity.Envios;
@@ -35,6 +36,17 @@ public class EnviosController {
                                                 @RequestHeader("idUsuario") String idUsuario) {
 
         return enviosService.guardarEnvioEnCarritoTemporal(fechaRecoleccion, fechaEntrega, idUsuario);
+
+    }
+
+    @PostMapping(value = "/envios/pedidoCreado/{fechaRecoleccion}/{fechaEntrega}/{carritoId}")
+    public ResponseEntity<Envios> guardarEnvioEnCarritoCreado(@PathVariable(name = "fechaRecoleccion") Date fechaRecoleccion,
+                                                              @PathVariable(name = "fechaEntrega") Date fechaEntrega,
+                                                              @PathVariable(name = "carritoId") Long carritoId,
+                                                              @RequestBody EnviosDto enviosDto) {
+
+        return ResponseEntity
+                .ok(enviosService.guardarEnvioEnCarritoCreado(fechaRecoleccion, fechaEntrega, carritoId, enviosDto.getMotivo()));
 
     }
 }
