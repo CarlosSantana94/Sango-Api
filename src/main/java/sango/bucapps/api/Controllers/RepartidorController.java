@@ -48,6 +48,7 @@ public class RepartidorController {
     @ResponseBody
     public ResponseEntity<ComentarioChoferes> obtenerComentarioExistentePorCarritoId
             (@PathVariable(name = "idCarrito") Long idCarrito) {
-        return ResponseEntity.ok(repartidorService.obtenerComentarioExistentePorCarritoId(idCarrito));
+        return ResponseEntity
+                .ok(repartidorService.obtenerComentarioExistentePorCarritoId(idCarrito));
     }
 }
