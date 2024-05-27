@@ -269,7 +269,7 @@ public class CarritoService {
             }
         }
 
-        list.sort(Comparator.comparing(ResumenCarritoDto::getRecoleccion));
+        list.sort(Comparator.comparing(ResumenCarritoDto::getId));
 
         return list;
     }
