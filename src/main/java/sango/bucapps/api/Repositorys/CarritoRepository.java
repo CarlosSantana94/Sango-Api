@@ -99,4 +99,9 @@ public interface CarritoRepository extends JpaRepository<Carrito, Long> {
 
     @Query(value = "select * from carrito where estado = :estado", nativeQuery = true)
     List<Carrito> getAllByEstado(@Param("estado") String estado);
+
+    @Modifying
+    @Transactional
+    @Query(value = "delete from carrito where usuario_id = :id and creado is null;",nativeQuery = true)
+    int deleteErrorCarritosUser(@Param("id") String id);
 }
