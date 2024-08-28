@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sango.bucapps.api.Models.DTO.OpcionesPrendaDto;
+import sango.bucapps.api.Models.DTO.ServicioConProductoYSubProductosDTO;
 import sango.bucapps.api.Models.DTO.SubOpcionesPrendaDto;
+import sango.bucapps.api.Models.DTO.TodosLosServicios;
 import sango.bucapps.api.Services.ProductosService;
 
 import java.util.List;
@@ -30,7 +32,7 @@ public class ProductosController {
 
 
     @GetMapping(value = "productos")
-    private List<SubOpcionesPrendaDto> obtenerTodosLosProductos() {
+    private  List<ServicioConProductoYSubProductosDTO> obtenerTodosLosProductos() {
         return productosService.obtenerTodosLosProductos();
     }
 

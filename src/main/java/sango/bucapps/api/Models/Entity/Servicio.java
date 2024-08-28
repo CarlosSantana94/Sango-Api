@@ -18,4 +18,6 @@ public class Servicio {
     @Column
     private String nombre;
 
+
+
 }

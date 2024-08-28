@@ -2,8 +2,7 @@ package sango.bucapps.api.Services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sango.bucapps.api.Models.DTO.OpcionesPrendaDto;
-import sango.bucapps.api.Models.DTO.SubOpcionesPrendaDto;
+import sango.bucapps.api.Models.DTO.*;
 import sango.bucapps.api.Models.Entity.OpcionesPrenda;
 import sango.bucapps.api.Models.Entity.Servicio;
 import sango.bucapps.api.Models.Entity.SubOpcionesPrenda;
@@ -69,11 +68,47 @@ public class ProductosService {
         return subOpcionesPrendas;
     }
 
-    public List<SubOpcionesPrendaDto> obtenerTodosLosProductos() {
-        List<SubOpcionesPrendaDto> respuesta = new ArrayList<>();
+    public List<ServicioConProductoYSubProductosDTO> obtenerTodosLosProductos() {
+
+
+
+        List<ServicioConProductoYSubProductosDTO> dtos = new ArrayList<>();
+
+        for (ServicioConProductoYSubProductosProjection proyeccion : serviciosRepository.encontrarTodo()) {
+            ServicioConProductoYSubProductosDTO dto = new ServicioConProductoYSubProductosDTO(
+                    proyeccion.getServicioId(),
+                    proyeccion.getServicioNombre(),
+                    proyeccion.getOpcionId(),
+                    proyeccion.getOpcionNombre(),
+                    proyeccion.getSubopcionId(),
+                    proyeccion.getSubopcionNombre(),
+                    proyeccion.getOpcionImg(),
+                    proyeccion.getSubopcionPrecio(),
+                    proyeccion.getSubopcionDescripcion(),
+                    proyeccion.getSubopcionImg(),
+                    proyeccion.getSubopcionPorMetro()
+            );
+            dtos.add(dto);
+        }
+
+
+
+      /*  List<TodosLosServicios> todosLosServicios = new ArrayList<>();
 
         for (Servicio s : serviciosRepository.findAll()) {
+            List<OpcionesPrendaDto> opcionesPrenda = new ArrayList<>();
+            TodosLosServicios servicio = new TodosLosServicios();
+            servicio.setNombreServicio(s.getNombre());
+            servicio.setServicioId(s.getId());
+
             for (OpcionesPrendaDto op : obtenerTodasLasOpcionesPorServicio(s.getId())) {
+                OpcionesPrendaDto opcion = new OpcionesPrendaDto();
+                opcion.setId(op.getId());
+                opcion.setNombre(op.getNombre());
+                opcion.setImg(op.getImg());
+                opcion.setServicioId(s.getId());
+                List<SubOpcionesPrendaDto> subs = new ArrayList<>();
+
                 for (SubOpcionesPrenda opc : subOpcionesPrendaRepository.getAllByOpcionesPrendaIdOrderByNombre(op.getId())) {
                     SubOpcionesPrendaDto dto = new SubOpcionesPrendaDto();
                     dto.setId(opc.getId());
@@ -84,16 +119,27 @@ public class ProductosService {
                     dto.setPorMetro(opc.getPorMetro());
                     dto.setServicioPadre(op.getNombre());
                     dto.setServicio(s.getNombre());
+                    dto.setOpcionPadreId(op.getId());
+                    dto.setServicioId(s.getId());
+                    subs.add(dto);
 
-                    respuesta.add(dto);
+
                 }
+                opcion.setSubOpcionesPrenda(subs);
+                opcionesPrenda.add(opcion);
+
             }
-        }
+            servicio.setOpcionesPrenda(opcionesPrenda);
+            todosLosServicios.add(servicio);
 
-        respuesta.sort(Comparator.comparing(SubOpcionesPrendaDto::getNombre));
 
-        return respuesta;
+        }*/
+
+        // respuesta.sort(Comparator.comparing(SubOpcionesPrendaDto::getNombre));
+
+        return dtos;
     }
+
 
     public SubOpcionesPrendaDto crearNuevaSubOpcion(SubOpcionesPrendaDto dto) {
         SubOpcionesPrenda sub = new SubOpcionesPrenda();
