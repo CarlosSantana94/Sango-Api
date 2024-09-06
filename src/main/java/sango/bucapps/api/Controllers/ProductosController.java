@@ -9,6 +9,7 @@ import sango.bucapps.api.Models.DTO.SubOpcionesPrendaDto;
 import sango.bucapps.api.Models.DTO.TodosLosServicios;
 import sango.bucapps.api.Services.ProductosService;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -32,7 +33,7 @@ public class ProductosController {
 
 
     @GetMapping(value = "productos")
-    private  List<ServicioConProductoYSubProductosDTO> obtenerTodosLosProductos() {
+    private   HashMap<String, HashMap<String, HashMap<String, ServicioConProductoYSubProductosDTO>>>  obtenerTodosLosProductos() {
         return productosService.obtenerTodosLosProductos();
     }
 

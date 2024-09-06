@@ -13,6 +13,7 @@ import sango.bucapps.api.Repositorys.SubOpcionesPrendaRepository;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -68,11 +69,8 @@ public class ProductosService {
         return subOpcionesPrendas;
     }
 
-    public List<ServicioConProductoYSubProductosDTO> obtenerTodosLosProductos() {
-
-
-
-        List<ServicioConProductoYSubProductosDTO> dtos = new ArrayList<>();
+    public HashMap<String, HashMap<String, HashMap<String, ServicioConProductoYSubProductosDTO>>> obtenerTodosLosProductos() {
+        HashMap<String, HashMap<String, HashMap<String, ServicioConProductoYSubProductosDTO>>> serviciosMap = new HashMap<>();
 
         for (ServicioConProductoYSubProductosProjection proyeccion : serviciosRepository.encontrarTodo()) {
             ServicioConProductoYSubProductosDTO dto = new ServicioConProductoYSubProductosDTO(
@@ -88,56 +86,21 @@ public class ProductosService {
                     proyeccion.getSubopcionImg(),
                     proyeccion.getSubopcionPorMetro()
             );
-            dtos.add(dto);
+
+            // Check if the outer map already contains the servicioId
+            serviciosMap.putIfAbsent(proyeccion.getServicioNombre(), new HashMap<>());
+            HashMap<String, HashMap<String, ServicioConProductoYSubProductosDTO>> categoriaMap = serviciosMap.get(proyeccion.getServicioNombre());
+
+            // Check if the middle map already contains the opcionId
+            categoriaMap.putIfAbsent(proyeccion.getOpcionNombre(), new HashMap<>());
+            HashMap<String, ServicioConProductoYSubProductosDTO> subProductoMap = categoriaMap.get(proyeccion.getOpcionNombre());
+
+            // Add or update the subopcionId and its corresponding DTO
+            subProductoMap.put(proyeccion.getSubopcionNombre(), dto);
         }
 
 
-
-      /*  List<TodosLosServicios> todosLosServicios = new ArrayList<>();
-
-        for (Servicio s : serviciosRepository.findAll()) {
-            List<OpcionesPrendaDto> opcionesPrenda = new ArrayList<>();
-            TodosLosServicios servicio = new TodosLosServicios();
-            servicio.setNombreServicio(s.getNombre());
-            servicio.setServicioId(s.getId());
-
-            for (OpcionesPrendaDto op : obtenerTodasLasOpcionesPorServicio(s.getId())) {
-                OpcionesPrendaDto opcion = new OpcionesPrendaDto();
-                opcion.setId(op.getId());
-                opcion.setNombre(op.getNombre());
-                opcion.setImg(op.getImg());
-                opcion.setServicioId(s.getId());
-                List<SubOpcionesPrendaDto> subs = new ArrayList<>();
-
-                for (SubOpcionesPrenda opc : subOpcionesPrendaRepository.getAllByOpcionesPrendaIdOrderByNombre(op.getId())) {
-                    SubOpcionesPrendaDto dto = new SubOpcionesPrendaDto();
-                    dto.setId(opc.getId());
-                    dto.setNombre(opc.getNombre().trim());
-                    dto.setPrecio(opc.getPrecio());
-                    dto.setDescripcion(opc.getDescripcion());
-                    dto.setImg(opc.getImg());
-                    dto.setPorMetro(opc.getPorMetro());
-                    dto.setServicioPadre(op.getNombre());
-                    dto.setServicio(s.getNombre());
-                    dto.setOpcionPadreId(op.getId());
-                    dto.setServicioId(s.getId());
-                    subs.add(dto);
-
-
-                }
-                opcion.setSubOpcionesPrenda(subs);
-                opcionesPrenda.add(opcion);
-
-            }
-            servicio.setOpcionesPrenda(opcionesPrenda);
-            todosLosServicios.add(servicio);
-
-
-        }*/
-
-        // respuesta.sort(Comparator.comparing(SubOpcionesPrendaDto::getNombre));
-
-        return dtos;
+        return serviciosMap;
     }
 
 
