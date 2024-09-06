@@ -87,6 +87,8 @@ public class ProductosService {
                     proyeccion.getSubopcionPorMetro()
             );
 
+
+
             // Check if the outer map already contains the servicioId
             serviciosMap.putIfAbsent(proyeccion.getServicioNombre(), new HashMap<>());
             HashMap<String, HashMap<String, ServicioConProductoYSubProductosDTO>> categoriaMap = serviciosMap.get(proyeccion.getServicioNombre());
