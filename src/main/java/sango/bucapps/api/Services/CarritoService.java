@@ -70,7 +70,7 @@ public class CarritoService {
     public CarritoDto obtenerCarritoNuevo(String idUsuario) {
         CarritoDto carritoDto = new CarritoDto();
         carritoDto.setCantidad(0L);
-        eliminarErroresCarrito(idUsuario);
+        //eliminarErroresCarrito(idUsuario);
 
 
         Carrito carrito = carritoRepository.getAllByUsuarioIdAndEstado(idUsuario, "Nuevo");
