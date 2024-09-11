@@ -24,8 +24,8 @@ public class HealthController {
         healthDto.setRequestTime(new Date());
         healthDto.setBuildTime(Date.from(buildProperties.getTime()));
         healthDto.setIsUp(true);
-        healthDto.setAppName("SANGO-API1.1-PROD");
-        healthDto.setVersion(13);
+        healthDto.setAppName("SANGO-API1.3-PROD");
+        healthDto.setVersion(14);
 
         return healthDto;
     }
@@ -37,8 +37,8 @@ public class HealthController {
         healthDto.setRequestTime(new Date());
         healthDto.setBuildTime(Date.from(buildProperties.getTime()));
         healthDto.setIsUp(true);
-        healthDto.setAppName("SANGO-API1.1-PROD");
-        healthDto.setVersion(13);
+        healthDto.setAppName("SANGO-API1.3-PROD");
+        healthDto.setVersion(14);
 
         return healthDto;
     }

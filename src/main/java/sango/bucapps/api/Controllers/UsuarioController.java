@@ -6,6 +6,8 @@ import sango.bucapps.api.Models.DTO.MsgRespuestaDto;
 import sango.bucapps.api.Models.Entity.Usuario;
 import sango.bucapps.api.Services.UsuarioService;
 
+import java.util.List;
+
 @RestController
 @CrossOrigin(maxAge = 3600)
 public class UsuarioController {
@@ -17,6 +19,12 @@ public class UsuarioController {
     @ResponseBody
     private MsgRespuestaDto crearOActualizarUsuario(@RequestBody Usuario usuario){
         return usuarioService.crearOActualizarUsuario(usuario);
+    }
+
+    @GetMapping(value = "/usuarios")
+    @ResponseBody
+    private List<Usuario> obtenerUsuarios(){
+        return usuarioService.obtenerUsuarios();
     }
 
 }

@@ -9,6 +9,8 @@ import sango.bucapps.api.Repositorys.CarritoRepository;
 import sango.bucapps.api.Repositorys.UsuarioRepository;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UsuarioService {
@@ -37,4 +39,9 @@ public class UsuarioService {
         }
         return msg;
     }
+
+    public List<Usuario> obtenerUsuarios() {
+       return usuarioRepository.findAll();
+    }
+
 }
