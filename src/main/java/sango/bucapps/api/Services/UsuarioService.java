@@ -41,7 +41,15 @@ public class UsuarioService {
     }
 
     public List<Usuario> obtenerUsuarios() {
-       return usuarioRepository.findAll();
+        return usuarioRepository.findAll();
     }
 
+    public Usuario obtenerUsuario(String id) {
+        Usuario usuario = usuarioRepository.findById(id).get();
+
+        if (usuario.getPuedePagarConCC() == null) {
+            usuario.setPuedePagarConCC(false);
+        }
+        return usuario;
+    }
 }

@@ -33,4 +33,7 @@ public class Usuario {
     @Column
     private String img;
 
+    @Column(columnDefinition = "boolean default false")
+    private Boolean puedePagarConCC;
+
 }

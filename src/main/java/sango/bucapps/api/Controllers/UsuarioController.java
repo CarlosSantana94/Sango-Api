@@ -17,14 +17,21 @@ public class UsuarioController {
 
     @PostMapping(value = "/usuario")
     @ResponseBody
-    private MsgRespuestaDto crearOActualizarUsuario(@RequestBody Usuario usuario){
+    private MsgRespuestaDto crearOActualizarUsuario(@RequestBody Usuario usuario) {
         return usuarioService.crearOActualizarUsuario(usuario);
     }
 
     @GetMapping(value = "/usuarios")
     @ResponseBody
-    private List<Usuario> obtenerUsuarios(){
+    private List<Usuario> obtenerUsuarios() {
         return usuarioService.obtenerUsuarios();
+    }
+
+    @GetMapping(value = "/usuario/{id}")
+    @ResponseBody
+    private Usuario obtenerUsuarios(@PathVariable String id) {
+        System.out.println(id);
+        return usuarioService.obtenerUsuario(id);
     }
 
 }
