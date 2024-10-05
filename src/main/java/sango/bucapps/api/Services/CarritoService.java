@@ -201,13 +201,22 @@ public class CarritoService {
 
             Usuario usuario = usuarioRepository.getById(idUsuario);
 
-            customerInfoDto.setName(resumenCarritoDto.getNombre());
-            customerInfoDto.setPhone(resumenCarritoDto.getTel().toString());
-            customerInfoDto.setEmail(usuario.getEmail());
+            if (resumenCarritoDto != null) {
+                if (resumenCarritoDto.getNombre() != null) {
+                    customerInfoDto.setName(resumenCarritoDto.getNombre());
+                }
+                if (resumenCarritoDto.getTel() != null) {
+                    customerInfoDto.setPhone(resumenCarritoDto.getTel().toString());
+                }
+            }
+
+            if (usuario != null && usuario.getEmail() != null) {
+                customerInfoDto.setEmail(usuario.getEmail());
+            }
 
             PaymentMethodDto paymentMethodDto = new PaymentMethodDto();
             paymentMethodDto.setType("card");
-            paymentMethodDto.setToken_id("tok_test_visa_4242");
+            paymentMethodDto.setToken_id(cuandoOToken);
 
             ChargesDto chargesDto = new ChargesDto();
             chargesDto.setPayment_method(paymentMethodDto);
