@@ -379,15 +379,20 @@ public class CarritoService {
             resumenCarritoDto.setCantidadPrendas(c.getSubOpcionesPrendas().size());
             resumenCarritoDto.setTotal(c.getTotal());
             resumenCarritoDto.setEstado(c.getEstado());
-            resumenCarritoDto.setDireccion(c.getDireccion().getDireccion());
-            resumenCarritoDto.setNombre(c.getDireccion().getNombre());
-            resumenCarritoDto.setTel(c.getDireccion().getTel());
+            if (c.getDireccion()!=null) {
+                resumenCarritoDto.setDireccion(c.getDireccion().getDireccion());
+                resumenCarritoDto.setNombre(c.getDireccion().getNombre());
+                resumenCarritoDto.setTel(c.getDireccion().getTel());
+                resumenCarritoDto.setLat(c.getDireccion().getLat());
+                resumenCarritoDto.setLng(c.getDireccion().getLng());
+            }
+
+
             resumenCarritoDto.setCreado(c.getCreado());
             resumenCarritoDto.setFormaDePago(c.getFormaDePago());
             resumenCarritoDto.setUsuario(c.getUsuario().getToken());
             resumenCarritoDto.setCuandoEfectivo(c.getCuandoOToken());
-            resumenCarritoDto.setLat(c.getDireccion().getLat());
-            resumenCarritoDto.setLng(c.getDireccion().getLng());
+
 
             list.add(resumenCarritoDto);
         }
