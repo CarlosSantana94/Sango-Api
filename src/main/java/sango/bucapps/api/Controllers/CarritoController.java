@@ -1,12 +1,14 @@
 package sango.bucapps.api.Controllers;
 
 import io.conekta.Error;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sango.bucapps.api.Models.DTO.*;
 import sango.bucapps.api.Models.Entity.Carrito;
 import sango.bucapps.api.Models.Entity.ConfirmacionPrendas;
+import sango.bucapps.api.Models.Entity.Usuario;
 import sango.bucapps.api.Services.CarritoService;
 
 import java.sql.Date;
@@ -48,9 +50,10 @@ public class CarritoController {
     @PostMapping(value = "/carrito/pagar/{metodo}/{cuandoOToken}", produces = "application/json")
     public MsgRespuestaDto pagarCarrito(@RequestHeader("idUsuario") String idUsuario,
                                         @PathVariable("metodo") String metodo,
-                                        @PathVariable("cuandoOToken") String cuandoOToken
+                                        @PathVariable("cuandoOToken") String cuandoOToken,
+                                        @RequestBody Usuario usuario
     ) throws Error {
-        return carritoService.pagarCarrito(idUsuario, metodo, cuandoOToken);
+        return carritoService.pagarCarrito(idUsuario, metodo, cuandoOToken,usuario.getEmail());
     }
 
     @GetMapping(value = "/carrito/pedidos", produces = "application/json")

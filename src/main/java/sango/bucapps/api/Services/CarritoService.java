@@ -171,13 +171,14 @@ public class CarritoService {
         return resumen;
     }
 
-    public MsgRespuestaDto pagarCarrito(String idUsuario, String metodo, String cuandoOToken) throws Error {
+    public MsgRespuestaDto pagarCarrito(String idUsuario, String metodo, String cuandoOToken, String email) throws Error {
         ResumenCarritoDto resumenCarritoDto = obtenerResumenDeCarrito(idUsuario, null);
         Carrito carrito = carritoRepository.getAllByUsuarioIdAndEstado(idUsuario, "Nuevo");
         MsgRespuestaDto respuestaDto = new MsgRespuestaDto();
 
         carrito.setFormaDePago(metodo);
         carrito.setCuandoOToken(cuandoOToken);
+
 
         if (metodo.equals("tarjeta")) {
             ConektaDto conektaDto = new ConektaDto();
@@ -210,8 +211,10 @@ public class CarritoService {
                 }
             }
 
-            if (usuario != null && usuario.getEmail() != null) {
-                customerInfoDto.setEmail(usuario.getEmail());
+            if (email == null || email.equals("")) {
+                email = "davidsantillancortes@gmail.com";
+            } else {
+                customerInfoDto.setEmail(email);
             }
 
             PaymentMethodDto paymentMethodDto = new PaymentMethodDto();
@@ -379,7 +382,7 @@ public class CarritoService {
             resumenCarritoDto.setCantidadPrendas(c.getSubOpcionesPrendas().size());
             resumenCarritoDto.setTotal(c.getTotal());
             resumenCarritoDto.setEstado(c.getEstado());
-            if (c.getDireccion()!=null) {
+            if (c.getDireccion() != null) {
                 resumenCarritoDto.setDireccion(c.getDireccion().getDireccion());
                 resumenCarritoDto.setNombre(c.getDireccion().getNombre());
                 resumenCarritoDto.setTel(c.getDireccion().getTel());
