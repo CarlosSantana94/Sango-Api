@@ -212,11 +212,12 @@ public class CarritoService {
             }
 
             if (email == null || email.equals("")) {
-                email = "davidsantillancortes@gmail.com";
-                customerInfoDto.setEmail(email);
+                customerInfoDto.setEmail("cgsp94@gmail.com");
             } else {
                 customerInfoDto.setEmail(email);
             }
+
+            System.out.println(customerInfoDto);
 
             PaymentMethodDto paymentMethodDto = new PaymentMethodDto();
             paymentMethodDto.setType("card");
