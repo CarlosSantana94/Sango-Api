@@ -213,6 +213,7 @@ public class CarritoService {
 
             if (email == null || email.equals("")) {
                 email = "davidsantillancortes@gmail.com";
+                customerInfoDto.setEmail(email);
             } else {
                 customerInfoDto.setEmail(email);
             }
