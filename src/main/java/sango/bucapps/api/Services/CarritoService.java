@@ -217,7 +217,11 @@ public class CarritoService {
                 customerInfoDto.setEmail(email);
             }
 
-            System.out.println(customerInfoDto);
+            System.out.println("email from post");
+            System.out.println(email);
+
+            System.out.println("customer Email");
+            System.out.println(customerInfoDto.getEmail());
 
             PaymentMethodDto paymentMethodDto = new PaymentMethodDto();
             paymentMethodDto.setType("card");
