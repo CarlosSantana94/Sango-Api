@@ -211,7 +211,7 @@ public class CarritoService {
                 }
             }
 
-            if (email == null || email.equals("")) {
+            if (email == null || email.equals("") || equals("null")) {
                 customerInfoDto.setEmail("cgsp94@gmail.com");
             } else {
                 customerInfoDto.setEmail(email);
