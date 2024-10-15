@@ -29,9 +29,15 @@ public class UsuarioController {
 
     @GetMapping(value = "/usuario/{id}")
     @ResponseBody
-    private Usuario obtenerUsuarios(@PathVariable String id) {
+    private Usuario obtenerUsuario(@PathVariable String id) {
         System.out.println(id);
         return usuarioService.obtenerUsuario(id);
+    }
+
+    @DeleteMapping(value = "/usuario/{id}")
+    @ResponseBody
+    private MsgRespuestaDto eliminarUsuarios(@PathVariable String id) {
+        return usuarioService.eliminarUsuarios(id);
     }
 
 

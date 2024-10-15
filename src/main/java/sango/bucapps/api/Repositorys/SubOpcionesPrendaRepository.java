@@ -9,4 +9,5 @@ public interface SubOpcionesPrendaRepository extends JpaRepository<SubOpcionesPr
 
     List<SubOpcionesPrenda> getAllByOpcionesPrendaIdOrderByNombre(Long opcionesPrendaId);
 
+
 }
