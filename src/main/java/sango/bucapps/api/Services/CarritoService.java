@@ -102,7 +102,7 @@ public class CarritoService {
     }
 
     public void eliminarErroresCarrito(String usuarioId) {
-        carritoRepository.deleteErrorCarritosUser(usuarioId);
+       // carritoRepository.deleteErrorCarritosUser(usuarioId);
     }
 
     public CarritoDto actualizarDireccionEnCarrito(String idUsuario, Long direccionId) {
