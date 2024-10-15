@@ -24,7 +24,7 @@ public class HealthController {
         healthDto.setRequestTime(new Date());
         healthDto.setBuildTime(Date.from(buildProperties.getTime()));
         healthDto.setIsUp(true);
-        healthDto.setAppName("SANGO-API1.7-PROD");
+        healthDto.setAppName("SANGO-API1.7.1-PROD");
         healthDto.setVersion(17);
 
         return healthDto;

@@ -114,62 +114,79 @@ public class CarritoService {
     }
 
     public ResumenCarritoDto obtenerResumenDeCarrito(String idUsuario, Long idCarrito) {
-        Carrito carrito;
-        if (idCarrito == null) {
-            carrito = carritoRepository.getAllByUsuarioIdAndEstado(idUsuario, "Nuevo");
-        } else {
-            carrito = carritoRepository.getById(idCarrito);
-        }
+        Carrito carrito = obtenerCarrito(idUsuario, idCarrito);
         Envios envios = enviosRepository.getAllByCarritoId(carrito.getId());
 
+
         ResumenCarritoDto resumen = new ResumenCarritoDto();
-        if (envios != null) {
-            resumen.setEntrega(envios.getFechaEntrega());
-            resumen.setRecoleccion(envios.getFechaRecoleccion());
-        }
+        mapEnviosToResumen(envios, resumen);
+        mapDireccionToResumen(carrito.getDireccion(), resumen);
+
+        List<SubOpcionesPrendaDto> subDtoList = mapSubOpcionesToDto(carrito.getSubOpcionesPrendas());
+
         resumen.setId(carrito.getId());
-        if (carrito.getDireccion() != null) {
-            resumen.setDireccion(carrito.getDireccion().getDireccion());
-            resumen.setCp(carrito.getDireccion().getCp());
-            resumen.setNombre(carrito.getDireccion().getNombre());
-            resumen.setTel(carrito.getDireccion().getTel());
-        }
-        int cantidadPrendas = 0;
-
-        List<SubOpcionesPrendaDto> subDtoList = new ArrayList<>();
-
-        for (SubOpcionesPrenda sub : carrito.getSubOpcionesPrendas()) {
-
-            Optional<SubOpcionesPrendaDto> subDto = subDtoList.stream().filter(s -> s.getId().equals(sub.getId())).findAny();
-
-            if (subDto.isPresent()) {
-                subDto.get().setCantidad(subDto.get().getCantidad() + 1);
-                subDto.get().setPrecioTotal(sub.getPrecio() * subDto.get().getCantidad());
-            } else {
-                SubOpcionesPrendaDto subDtoNew = new SubOpcionesPrendaDto();
-                subDtoNew.setId(sub.getId());
-                subDtoNew.setNombre(sub.getNombre());
-                subDtoNew.setPrecio(sub.getPrecio());
-                subDtoNew.setPrecioTotal(sub.getPrecio());
-                subDtoNew.setImg(sub.getImg());
-                subDtoNew.setCantidad(1L);
-                subDtoNew.setServicio(sub.getOpcionesPrenda().getServicio().getNombre());
-
-                subDtoList.add(subDtoNew);
-            }
-
-        }
         resumen.setEstado(carrito.getEstado());
         resumen.setCreado(carrito.getCreado());
         resumen.setTotal(carrito.getTotal());
         resumen.setFormaDePago(carrito.getFormaDePago());
-        resumen.setCantidadPrendas(carrito.getSubOpcionesPrendas().size());
+        resumen.setCantidadPrendas(subDtoList.stream()
+                .mapToInt(sub -> sub.getCantidad().intValue()) // Explicitly convert Long to int
+                .sum());
         resumen.setPrendasList(subDtoList);
         resumen.setCuandoEfectivo(carrito.getCuandoOToken());
 
-
         return resumen;
     }
+
+    private Carrito obtenerCarrito(String idUsuario, Long idCarrito) {
+        if (idCarrito == null) {
+            return carritoRepository.getAllByUsuarioIdAndEstado(idUsuario, "Nuevo");
+        } else {
+            return carritoRepository.getById(idCarrito);
+        }
+    }
+
+    private void mapEnviosToResumen(Envios envios, ResumenCarritoDto resumen) {
+        if (envios != null) {
+            resumen.setEntrega(envios.getFechaEntrega());
+            resumen.setRecoleccion(envios.getFechaRecoleccion());
+        }
+    }
+
+    private void mapDireccionToResumen(Direccion direccion, ResumenCarritoDto resumen) {
+        if (direccion != null) {
+            resumen.setDireccion(direccion.getDireccion());
+            resumen.setCp(direccion.getCp());
+            resumen.setNombre(direccion.getNombre());
+            resumen.setTel(direccion.getTel());
+        }
+    }
+
+    private List<SubOpcionesPrendaDto> mapSubOpcionesToDto(List<SubOpcionesPrenda> subOpcionesPrendas) {
+        Map<Long, SubOpcionesPrendaDto> subDtoMap = new HashMap<>();
+
+        for (SubOpcionesPrenda sub : subOpcionesPrendas) {
+            SubOpcionesPrendaDto subDto = subDtoMap.get(sub.getId());
+            if (subDto != null) {
+                subDto.setCantidad(subDto.getCantidad() + 1);
+                subDto.setPrecioTotal(subDto.getCantidad() * sub.getPrecio());
+            } else {
+                subDto = new SubOpcionesPrendaDto();
+                subDto.setId(sub.getId());
+                subDto.setNombre(sub.getNombre());
+                subDto.setPrecio(sub.getPrecio());
+                subDto.setPrecioTotal(sub.getPrecio());
+                subDto.setImg(sub.getImg());
+                subDto.setCantidad(1L);
+                subDto.setServicioPadre(sub.getOpcionesPrenda().getNombre());
+                subDto.setServicio(sub.getOpcionesPrenda().getServicio().getNombre());
+                subDtoMap.put(sub.getId(), subDto);
+            }
+        }
+
+        return new ArrayList<>(subDtoMap.values());
+    }
+
 
     public MsgRespuestaDto pagarCarrito(String idUsuario, String metodo, String cuandoOToken, String email) throws Error {
         ResumenCarritoDto resumenCarritoDto = obtenerResumenDeCarrito(idUsuario, null);
