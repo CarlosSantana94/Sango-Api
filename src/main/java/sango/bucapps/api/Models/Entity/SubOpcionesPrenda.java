@@ -1,7 +1,9 @@
 package sango.bucapps.api.Models.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import sango.bucapps.api.v2.Models.Enums.EstadoPrenda;
 
 import javax.persistence.*;
 
@@ -34,6 +36,7 @@ public class SubOpcionesPrenda {
     @Column
     private Boolean porMetro;
 
-
+    @Enumerated(EnumType.STRING)
+    private EstadoPrenda estado = EstadoPrenda.PENDIENTE;
 
 }
