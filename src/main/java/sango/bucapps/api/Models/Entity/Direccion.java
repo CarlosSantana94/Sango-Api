@@ -1,5 +1,6 @@
 package sango.bucapps.api.Models.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -43,6 +44,7 @@ public class Direccion {
 
     @JoinColumn(name = "usuario_id")
     @ManyToOne
+    @JsonIgnore
     private Usuario usuario;
 
 }

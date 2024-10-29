@@ -12,6 +12,6 @@ public interface EnviosRepository extends JpaRepository<Envios, Long> {
 
     Long countAllByFechaEntrega(Date fechaEntrega);
 
-    Envios getAllByCarritoId(Long carritoId);
+    Envios getByCarritoV2Id(Long id);
 
 }

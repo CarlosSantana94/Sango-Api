@@ -1,7 +1,10 @@
 package sango.bucapps.api.v2.Controllers;
 
+import io.conekta.Error;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sango.bucapps.api.Models.DTO.MsgRespuestaDto;
+import sango.bucapps.api.Models.Entity.Usuario;
 import sango.bucapps.api.v2.Models.Dtos.ResumenCarrito;
 import sango.bucapps.api.v2.Models.Entities.CarritoItemV2;
 import sango.bucapps.api.v2.Models.Entities.CarritoV2;
@@ -42,10 +45,9 @@ public class CarritoControllerV2 {
     }
 
     @GetMapping("/{carritoId}")
-    public ResponseEntity<CarritoV2> obtenerCarritoPorId(@PathVariable Long carritoId) {
-        Optional<CarritoV2> carrito = carritoService.obtenerCarritoPorId(carritoId);
-        return carrito.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<ResumenCarrito> obtenerCarritoPorId(@PathVariable Long carritoId) {
+        ResumenCarrito carrito = carritoService.obtenerResumenCarritoPorId(carritoId);
+        return ResponseEntity.ok(carrito);
     }
 
     // Obtener el carrito activo
@@ -83,6 +85,26 @@ public class CarritoControllerV2 {
     public ResponseEntity<ResumenCarrito> obtenerResumenCarrito(@PathVariable String usuarioId) {
         ResumenCarrito resumen = carritoService.obtenerResumenCarrito(usuarioId);
         return ResponseEntity.ok(resumen);
+    }
+
+    // Asignar dirección a un carrito
+    @PostMapping("/{carritoId}/direccion/{direccionId}")
+    public ResponseEntity<CarritoV2> asignarDireccion(@PathVariable Long carritoId, @PathVariable Long direccionId) {
+        CarritoV2 carritoActualizado = carritoService.asignarDireccion(carritoId, direccionId);
+        if (carritoActualizado == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(carritoActualizado);
+    }
+
+
+    @PostMapping(value = "/carrito/pagar/{metodo}/{cuandoOToken}", produces = "application/json")
+    public MsgRespuestaDto pagarCarritoV2(@RequestHeader("idUsuario") String idUsuario,
+                                          @PathVariable("metodo") String metodo,
+                                          @PathVariable("cuandoOToken") String cuandoOToken,
+                                          @RequestParam String email
+    ) throws Error {
+        return carritoService.pagarCarrito(idUsuario, metodo, cuandoOToken, email);
     }
 
 }

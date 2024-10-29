@@ -1,7 +1,9 @@
 package sango.bucapps.api.Models.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import sango.bucapps.api.v2.Models.Entities.CarritoV2;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -23,12 +25,16 @@ public class Envios {
     @Column
     private Date fechaEntrega;
 
-    @JoinColumn(name = "carrito_id")
+    @JoinColumn(name = "carrito_id_v2", nullable = false)
     @OneToOne
-    private Carrito carrito;
+    @JsonIgnore
+    private CarritoV2 carritoV2;
 
     @Column
     private Date fechaCreado;
+
+    @Column
+    private Date fechaModificado;
 
     @Column
     private Date fechaOriginalRecoleccion;

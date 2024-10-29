@@ -115,7 +115,7 @@ public class CarritoService {
 
     public ResumenCarritoDto obtenerResumenDeCarrito(String idUsuario, Long idCarrito) {
         Carrito carrito = obtenerCarrito(idUsuario, idCarrito);
-        Envios envios = enviosRepository.getAllByCarritoId(carrito.getId());
+        Envios envios = enviosRepository.getByCarritoV2Id(carrito.getId());
 
 
         ResumenCarritoDto resumen = new ResumenCarritoDto();
@@ -299,7 +299,7 @@ public class CarritoService {
         for (Carrito c : carritos) {
             if (!c.getEstado().equals("Nuevo")) {
                 ResumenCarritoDto resumenCarritoDto = new ResumenCarritoDto();
-                Envios envios = enviosRepository.getAllByCarritoId(c.getId());
+                Envios envios = enviosRepository.getByCarritoV2Id(c.getId());
 
                 resumenCarritoDto.setId(c.getId());
                 resumenCarritoDto.setRecoleccion(envios.getFechaRecoleccion());
@@ -399,7 +399,7 @@ public class CarritoService {
             ResumenCarritoDto resumenCarritoDto = new ResumenCarritoDto();
 
 
-            Envios envios = enviosRepository.getAllByCarritoId(c.getId());
+            Envios envios = enviosRepository.getByCarritoV2Id(c.getId());
 
             resumenCarritoDto.setId(c.getId());
             resumenCarritoDto.setRecoleccion(envios.getFechaRecoleccion());
@@ -463,7 +463,7 @@ public class CarritoService {
         for (Carrito c : carritos) {
 
             Envios e = envios.stream()
-                    .filter(env -> c.getId().equals(env.getCarrito().getId()))
+                    .filter(env -> c.getId().equals(env.getCarritoV2().getId()))
                     .findAny().orElse(null);
 
             if (e != null) {

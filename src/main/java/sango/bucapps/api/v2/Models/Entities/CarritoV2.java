@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
+import sango.bucapps.api.Models.Entity.Direccion;
+import sango.bucapps.api.Models.Entity.Envios;
 import sango.bucapps.api.Models.Entity.SubOpcionesPrenda;
 import sango.bucapps.api.v2.Models.Enums.EstadoCarrito;
 
@@ -26,6 +28,10 @@ public class CarritoV2 {
     @JoinColumn(name = "usuario_id", nullable = false)
     private UsuarioV2 usuario;
 
+    @ManyToOne
+    @JoinColumn(name = "envios_id")
+    private Envios envios;
+
     @Enumerated(EnumType.STRING)
     private EstadoCarrito estado;
 
@@ -36,9 +42,17 @@ public class CarritoV2 {
     private Date fechaEntrega;
 
     // Relación con CarritoItemV2 (ítems del carrito)
-    @JsonManagedReference
     @OneToMany(mappedBy = "carrito", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CarritoItemV2> items;
 
+    @ManyToOne
+    @JoinColumn(name = "direccion_id")
+    private Direccion direccion;
+
+    private String cuandoOToken;
+
+    private String formaDePago;
+
+    private String ordenConekta;
 }
 

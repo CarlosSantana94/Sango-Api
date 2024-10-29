@@ -2,7 +2,6 @@ package sango.bucapps.api.Services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import sango.bucapps.api.Models.DTO.MsgRespuestaDto;
 import sango.bucapps.api.Models.Entity.Carrito;
 import sango.bucapps.api.Models.Entity.Direccion;
@@ -11,7 +10,6 @@ import sango.bucapps.api.Models.Entity.Usuario;
 import sango.bucapps.api.Repositorys.*;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -89,7 +87,7 @@ public class UsuarioService {
             direccionRepository.deleteAll(direccion);
 
             for (Carrito c : carrito) {
-                Envios envios = enviosRepository.getAllByCarritoId(c.getId());
+                Envios envios = enviosRepository.getByCarritoV2Id(c.getId());
                 if (envios != null) {
                     enviosRepository.delete(envios);
                 }

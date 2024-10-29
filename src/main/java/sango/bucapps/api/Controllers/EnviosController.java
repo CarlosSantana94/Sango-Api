@@ -33,9 +33,9 @@ public class EnviosController {
     @PostMapping(value = "/envios/{fechaRecoleccion}/{fechaEntrega}")
     public Envios guardarEnvioEnCarritoTemporal(@PathVariable(name = "fechaRecoleccion") Date fechaRecoleccion,
                                                 @PathVariable(name = "fechaEntrega") Date fechaEntrega,
-                                                @RequestHeader("idUsuario") String idUsuario) {
+                                                @RequestParam Long carritoId) {
 
-        return enviosService.guardarEnvioEnCarritoTemporal(fechaRecoleccion, fechaEntrega, idUsuario);
+        return enviosService.guardarEnvioEnCarritoTemporal(fechaRecoleccion, fechaEntrega, carritoId);
 
     }
 
