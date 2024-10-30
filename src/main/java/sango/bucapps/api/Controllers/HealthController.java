@@ -20,12 +20,16 @@ public class HealthController {
     @GetMapping(value = "/")
     public HealthDto getIndexConnection() {
 
+        return getHealthDto();
+    }
+
+    private HealthDto getHealthDto() {
         HealthDto healthDto = new HealthDto();
         healthDto.setRequestTime(new Date());
         healthDto.setBuildTime(Date.from(buildProperties.getTime()));
         healthDto.setIsUp(true);
         healthDto.setAppName("SANGO-API2.19-PROD");
-        healthDto.setVersion(19);
+        healthDto.setVersion(20);
 
         return healthDto;
     }
@@ -33,13 +37,6 @@ public class HealthController {
     @GetMapping(value = "/health")
     public HealthDto getHealth() {
 
-        HealthDto healthDto = new HealthDto();
-        healthDto.setRequestTime(new Date());
-        healthDto.setBuildTime(Date.from(buildProperties.getTime()));
-        healthDto.setIsUp(true);
-        healthDto.setAppName("SANGO-API2.19-PROD");
-        healthDto.setVersion(189);
-
-        return healthDto;
+        return getHealthDto();
     }
 }

@@ -59,9 +59,7 @@ public class ProductosService {
             dto.setImg(opc.getImg());
 
 
-            dto.setCantidad(carritoRepository
-                    .obtenerCantidadDePrendaEnCarrito(carritoRepository
-                            .getAllByUsuarioIdAndEstado(idUsuario, "Nuevo").getId(), opc.getId()));
+
 
             subOpcionesPrendas.add(dto);
         }
