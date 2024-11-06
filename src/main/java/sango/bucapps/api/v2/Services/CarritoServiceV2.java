@@ -8,6 +8,7 @@ import io.conekta.Order;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import sango.bucapps.api.Models.DTO.MsgRespuestaDto;
 import sango.bucapps.api.Models.DTO.ResumenCarritoDto;
 import sango.bucapps.api.Models.DTO.SubOpcionesPrendaDto;
@@ -373,6 +374,14 @@ public class CarritoServiceV2 {
                                 }
                         )
                 ));
+    }
+
+    @Transactional
+    public void actualizarImprimir(Long carritoId) {
+        CarritoV2 carrito = carritoRepository.findById(carritoId)
+                .orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado con id: " + carritoId));
+        carrito.setImprimir(false);
+        carritoRepository.save(carrito);
     }
 }
 

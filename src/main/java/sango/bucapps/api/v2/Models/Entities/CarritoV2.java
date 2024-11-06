@@ -54,5 +54,8 @@ public class CarritoV2 {
     private String formaDePago;
 
     private String ordenConekta;
+
+    @Column(name = "imprimir", columnDefinition = "boolean default false")
+    private boolean imprimir = false;
 }
 

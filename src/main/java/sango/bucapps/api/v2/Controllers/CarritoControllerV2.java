@@ -115,4 +115,10 @@ public class CarritoControllerV2 {
         return ResponseEntity.ok(carritosAgrupados);
     }
 
+    @PostMapping("/{id}/imprimir")
+    public ResponseEntity<String> actualizarImprimir(@PathVariable("id") Long carritoId) {
+        carritoService.actualizarImprimir(carritoId);
+        return ResponseEntity.ok("El campo 'imprimir' ha sido actualizado a false para el carrito con id: " + carritoId);
+    }
+
 }

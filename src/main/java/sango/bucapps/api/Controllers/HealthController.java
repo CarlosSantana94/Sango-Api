@@ -29,7 +29,7 @@ public class HealthController {
         healthDto.setBuildTime(Date.from(buildProperties.getTime()));
         healthDto.setIsUp(true);
         healthDto.setAppName("SANGO-API2.19-PROD");
-        healthDto.setVersion(20);
+        healthDto.setVersion(21);
 
         return healthDto;
     }
