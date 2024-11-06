@@ -12,6 +12,7 @@ import sango.bucapps.api.v2.Models.Enums.EstadoCarrito;
 import sango.bucapps.api.v2.Services.CarritoServiceV2;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -105,6 +106,13 @@ public class CarritoControllerV2 {
                                           @RequestParam String email
     ) throws Error {
         return carritoService.pagarCarrito(idUsuario, metodo, cuandoOToken, email);
+    }
+
+    // Endpoint para obtener carritos agrupados por estado (excluyendo "NUEVO")
+    @GetMapping("/agrupados-por-estado")
+    public ResponseEntity<Map<EstadoCarrito, Map<String, Object>>> obtenerCarritosAgrupadosPorEstado() {
+        Map<EstadoCarrito, Map<String, Object>> carritosAgrupados = carritoService.obtenerCarritosAgrupadosPorEstado();
+        return ResponseEntity.ok(carritosAgrupados);
     }
 
 }

@@ -27,10 +27,7 @@ import sango.bucapps.api.v2.Repositories.CarritoItemRepositoryV2;
 import sango.bucapps.api.v2.Repositories.CarritoRepositoryV2;
 import sango.bucapps.api.v2.Repositories.UsuarioRepositoryV2;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -343,6 +340,39 @@ public class CarritoServiceV2 {
             obtenerCarritoActivo(usuarioId);
         }
         return respuestaDto;
+    }
+
+    // Obtener carritos agrupados por estado (excluyendo "NUEVO")
+    public Map<EstadoCarrito, Map<String, Object>> obtenerCarritosAgrupadosPorEstado() {
+        return carritoRepository.findAll().stream()
+                .filter(carrito -> carrito.getEstado() != EstadoCarrito.NUEVO) // Ignorar carritos en estado NUEVO
+                .collect(Collectors.groupingBy(
+                        CarritoV2::getEstado,
+                        Collectors.collectingAndThen(
+                                Collectors.toList(),
+                                carritos -> {
+                                    Map<String, Object> result = new HashMap<>();
+                                    result.put("total", carritos.size());
+
+                                    // Calcular el total de cada carrito
+                                    List<Map<String, Object>> carritosConTotal = carritos.stream()
+                                            .map(carrito -> {
+                                                double totalCarrito = carrito.getItems().stream()
+                                                        .mapToDouble(item -> item.getPrenda().getPrecio() * item.getCantidad()) // Precio * cantidad
+                                                        .sum();
+
+                                                Map<String, Object> carritoMap = new HashMap<>();
+                                                carritoMap.put("carrito", carrito);
+                                                carritoMap.put("totalCarrito", totalCarrito); // Total monetario del carrito
+                                                return carritoMap;
+                                            })
+                                            .collect(Collectors.toList());
+
+                                    result.put("carritos", carritosConTotal);
+                                    return result;
+                                }
+                        )
+                ));
     }
 }
 
