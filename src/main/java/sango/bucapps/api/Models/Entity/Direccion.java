@@ -47,4 +47,7 @@ public class Direccion {
     @JsonIgnore
     private Usuario usuario;
 
+    @Column(columnDefinition = "BOOLEAN DEFAULT TRUE")
+    private Boolean habilitada;
+
 }

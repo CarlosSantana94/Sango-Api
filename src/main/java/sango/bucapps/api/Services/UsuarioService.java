@@ -82,7 +82,7 @@ public class UsuarioService {
 
             Usuario usuario = obtenerUsuario(id);
             List<Carrito> carrito = carritoRepository.getAllByUsuarioId(id);
-            List<Direccion> direccion = direccionRepository.getAllByUsuarioId(id);
+            List<Direccion> direccion = direccionRepository.getAllByUsuarioIdAndHabilitada(id,true);
 
             direccionRepository.deleteAll(direccion);
 

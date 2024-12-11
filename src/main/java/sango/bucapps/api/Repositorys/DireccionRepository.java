@@ -6,5 +6,5 @@ import sango.bucapps.api.Models.Entity.Direccion;
 import java.util.List;
 
 public interface DireccionRepository extends JpaRepository<Direccion, Long> {
-    List<Direccion> getAllByUsuarioId(String idUsuario);
+    List<Direccion> getAllByUsuarioIdAndHabilitada(String idUsuario, boolean habilitada);
 }

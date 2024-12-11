@@ -44,10 +44,12 @@ public class EnviosService {
         List<EnviosDto> listadoDisponible = new ArrayList<>();
         int diasDisponibles = 20;
 
+
         // Fecha base para empezar el conteo (hoy o fecha proporcionada)
         LocalDate fechaBase = fechaInicial != null
                 ? new java.sql.Date(fechaInicial.getTime()).toLocalDate()
                 : LocalDate.now();
+
 
         // Avanzar 3 días naturales para empezar la búsqueda
         fechaBase = fechaBase.plusDays(2);
@@ -55,6 +57,7 @@ public class EnviosService {
         // Generar los próximos días disponibles
         while (diasDisponibles > 0) {
             // Saltar fines de semana
+
             if (fechaBase.getDayOfWeek() != DayOfWeek.SUNDAY && !DIAS_FESTIVOS.contains(fechaBase)) {
                 EnviosDto enviosDto = new EnviosDto();
                 enviosDto.setFecha(java.sql.Date.valueOf(fechaBase));

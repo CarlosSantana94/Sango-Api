@@ -18,8 +18,18 @@ public class DireccionService {
     private UsuarioRepository usuarioRepository;
 
     public DireccionDto guardarDireccion(DireccionDto dto, String idUsuario) {
+        Direccion direccion;
 
-        Direccion direccion = new Direccion();
+        // Si el DTO tiene un ID, buscar la dirección existente para actualizar
+        if (dto.getId() != null) {
+            direccion = direccionRepository.findById(dto.getId())
+                    .orElseThrow(() -> new RuntimeException("Dirección no encontrada con ID: " + dto.getId()));
+        } else {
+            // Si no tiene ID, crear una nueva instancia
+            direccion = new Direccion();
+        }
+
+        // Mapear los campos del DTO a la entidad
         direccion.setCp(dto.getCp());
         direccion.setTel(dto.getTel());
         direccion.setIndicacion(dto.getIndicacion());
@@ -29,15 +39,32 @@ public class DireccionService {
         direccion.setLng(dto.getLng());
         direccion.setNombre(dto.getNombre());
         direccion.setInterior(dto.getInterior());
-
         direccion.setUsuario(usuarioRepository.getById(idUsuario));
 
-        direccionRepository.save(direccion);
+        // Guardar la entidad en la base de datos
+        direccion = direccionRepository.save(direccion);
+
+        // Mapear nuevamente a DTO si es necesario
+        dto.setId(direccion.getId()); // Si es una nueva dirección, establecer el ID generado
         return dto;
     }
 
+
     public List<Direccion> obtenerTodasLasDirecciones(String idUsuario) {
 
-        return direccionRepository.getAllByUsuarioId(idUsuario);
+        return direccionRepository.getAllByUsuarioIdAndHabilitada(idUsuario, true);
+    }
+
+    public Direccion obtenerDireccionPorId(Long id) {
+        return direccionRepository.findById(id).orElse(null);
+    }
+
+    public Direccion deshabilitarDireccion(Long direccionId) {
+
+        Direccion direccion = direccionRepository.findById(direccionId).orElse(null);
+
+        direccion.setHabilitada(Boolean.FALSE);
+
+        return direccionRepository.save(direccion);
     }
 }

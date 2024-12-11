@@ -16,14 +16,24 @@ public class DireccionController {
 
     @PostMapping(value = "/direccion")
     public DireccionDto guardarDireccion(@RequestBody DireccionDto direccion,
-                                      @RequestHeader("idUsuario") String idUsuario){
+                                         @RequestHeader("idUsuario") String idUsuario) {
 
-        return direccionService.guardarDireccion(direccion,idUsuario);
+        return direccionService.guardarDireccion(direccion, idUsuario);
     }
 
     @GetMapping(value = "/direccion/lista")
-    public List<Direccion> obtenerTodasLasDirecciones(@RequestHeader("idUsuario") String idUsuario){
+    public List<Direccion> obtenerTodasLasDirecciones(@RequestHeader("idUsuario") String idUsuario) {
         return direccionService.obtenerTodasLasDirecciones(idUsuario);
+    }
+
+    @GetMapping(value = "/direccion/{direccionId}")
+    public Direccion obtenerTodasLasDirecciones(@PathVariable("direccionId") Long direccionId) {
+        return direccionService.obtenerDireccionPorId(direccionId);
+    }
+
+    @GetMapping(value = "/direccion/disable/{direccionId}")
+    public Direccion deshabilitarDireccion(@PathVariable("direccionId") Long direccionId) {
+        return direccionService.deshabilitarDireccion(direccionId);
     }
 
 }
