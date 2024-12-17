@@ -32,5 +32,7 @@ public class CarritoItemV2 {
     @Enumerated(EnumType.STRING)
     private EstadoPrenda estado = EstadoPrenda.PENDIENTE;
 
+    private String commentario;
+
 
 }

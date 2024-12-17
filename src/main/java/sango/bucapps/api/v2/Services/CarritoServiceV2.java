@@ -383,5 +383,17 @@ public class CarritoServiceV2 {
         carrito.setImprimir(false);
         carritoRepository.save(carrito);
     }
+
+    public CarritoItemV2 actualizarComentario(Long idPrenda, String comentario) {
+        Optional<CarritoItemV2> itemOptional = carritoItemRepository.findById(idPrenda);
+
+        if (itemOptional.isPresent()) {
+            CarritoItemV2 carritoItem = itemOptional.get();
+            carritoItem.setCommentario(comentario); // Actualiza el comentario
+            return carritoItemRepository.save(carritoItem); // Guarda los cambios
+        } else {
+            throw new RuntimeException("La prenda con ID " + idPrenda + " no existe.");
+        }
+    }
 }
 

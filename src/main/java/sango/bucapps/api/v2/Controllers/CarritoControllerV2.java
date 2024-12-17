@@ -121,4 +121,14 @@ public class CarritoControllerV2 {
         return ResponseEntity.ok("El campo 'imprimir' ha sido actualizado a false para el carrito con id: " + carritoId);
     }
 
+    @PutMapping("/item/{idPrenda}/comentario")
+    public ResponseEntity<CarritoItemV2> actualizarComentarioPrenda(@PathVariable Long idPrenda, @RequestParam String comentario) {
+        try {
+            CarritoItemV2 itemActualizado = carritoService.actualizarComentario(idPrenda, comentario);
+            return ResponseEntity.ok(itemActualizado);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }
