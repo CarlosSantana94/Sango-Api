@@ -3,6 +3,7 @@ package sango.bucapps.api.v2.Models.Entities;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
+import lombok.ToString;
 import sango.bucapps.api.Models.Entity.SubOpcionesPrenda;
 import sango.bucapps.api.v2.Models.Enums.EstadoPrenda;
 
@@ -12,6 +13,7 @@ import javax.persistence.*;
 @Table(name = "carrito_item")
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@ToString(exclude = "carrito")
 public class CarritoItemV2 {
 
     @Id

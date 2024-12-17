@@ -10,6 +10,7 @@ public class DetalleCarrito {
     private double precioUnitario;
     private double subtotal;
     private Long id;
+    private Long idItemIndividual;
     private String nombreCategoria;
     private Long idCategoria;
     private String Servicio;
@@ -17,12 +18,13 @@ public class DetalleCarrito {
     private String imgPrenda;
     private String comentario;
 
-    public DetalleCarrito(String nombrePrenda, int cantidad, double precioUnitario, double subtotal, Long id, String nombreCategoria, Long idCategoria, String servicio, Long idServicio, String imgPrenda, String comentario) {
+    public DetalleCarrito(String nombrePrenda, int cantidad, double precioUnitario, double subtotal, Long id, Long idItemIndividual, String nombreCategoria, Long idCategoria, String servicio, Long idServicio, String imgPrenda, String comentario) {
         this.nombrePrenda = nombrePrenda;
         this.cantidad = cantidad;
         this.precioUnitario = precioUnitario;
         this.subtotal = subtotal;
         this.id = id;
+        this.idItemIndividual = idItemIndividual;
         this.nombreCategoria = nombreCategoria;
         this.idCategoria = idCategoria;
         Servicio = servicio;
