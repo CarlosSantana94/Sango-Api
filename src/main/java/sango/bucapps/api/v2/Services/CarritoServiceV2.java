@@ -201,7 +201,8 @@ public class CarritoServiceV2 {
                         item.getPrenda().getOpcionesPrenda().getId(),
                         item.getPrenda().getOpcionesPrenda().getServicio().getNombre(),
                         item.getPrenda().getOpcionesPrenda().getServicio().getId(),
-                        item.getPrenda().getImg()
+                        item.getPrenda().getImg(),
+                        item.getCommentario()
                 ))
                 .collect(Collectors.toList());
 
@@ -225,7 +226,8 @@ public class CarritoServiceV2 {
                         item.getPrenda().getOpcionesPrenda().getId(),
                         item.getPrenda().getOpcionesPrenda().getServicio().getNombre(),
                         item.getPrenda().getOpcionesPrenda().getServicio().getId(),
-                        item.getPrenda().getImg()
+                        item.getPrenda().getImg(),
+                        item.getCommentario()
                 ))
                 .collect(Collectors.toList());
 

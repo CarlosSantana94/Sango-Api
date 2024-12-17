@@ -15,8 +15,9 @@ public class DetalleCarrito {
     private String Servicio;
     private Long idServicio;
     private String imgPrenda;
+    private String comentario;
 
-    public DetalleCarrito(String nombrePrenda, int cantidad, double precioUnitario, double subtotal, Long id, String nombreCategoria, Long idCategoria, String servicio, Long idServicio, String imgPrenda) {
+    public DetalleCarrito(String nombrePrenda, int cantidad, double precioUnitario, double subtotal, Long id, String nombreCategoria, Long idCategoria, String servicio, Long idServicio, String imgPrenda, String comentario) {
         this.nombrePrenda = nombrePrenda;
         this.cantidad = cantidad;
         this.precioUnitario = precioUnitario;
@@ -27,5 +28,6 @@ public class DetalleCarrito {
         Servicio = servicio;
         this.idServicio = idServicio;
         this.imgPrenda = imgPrenda;
+        this.comentario = comentario;
     }
 }
