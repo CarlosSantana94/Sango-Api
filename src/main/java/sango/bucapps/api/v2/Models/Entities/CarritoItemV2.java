@@ -32,5 +32,5 @@ public class CarritoItemV2 {
     @Enumerated(EnumType.STRING)
     private EstadoPrenda estado = EstadoPrenda.PENDIENTE;
 
-    // Getters y Setters
+
 }

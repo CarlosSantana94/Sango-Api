@@ -210,7 +210,7 @@ public class CarritoServiceV2 {
         // Calcular el total de prendas (sumando las cantidades de cada ítem)
         int totalPrendas = detalles.stream().mapToInt(DetalleCarrito::getCantidad).sum();
 
-        return new ResumenCarrito(detalles, total, carrito.getId(), totalPrendas, carrito.getEnvios(), carrito.getDireccion());
+        return new ResumenCarrito(detalles, total, carrito.getId(), totalPrendas, carrito.getEnvios(), carrito.getDireccion(),carrito.getEstado());
     }
 
     public ResumenCarrito obtenerResumenCarritoPorId(Long carritoId) {
@@ -234,7 +234,7 @@ public class CarritoServiceV2 {
         // Calcular el total de prendas (sumando las cantidades de cada ítem)
         int totalPrendas = detalles.stream().mapToInt(DetalleCarrito::getCantidad).sum();
 
-        return new ResumenCarrito(detalles, total, carrito.getId(), totalPrendas, carrito.getEnvios(), carrito.getDireccion());
+        return new ResumenCarrito(detalles, total, carrito.getId(), totalPrendas, carrito.getEnvios(), carrito.getDireccion(),carrito.getEstado());
     }
 
     public CarritoV2 asignarDireccion(Long carritoId, Long direccionId) {
