@@ -316,7 +316,13 @@ public class CarritoServiceV2 {
 
 
             try {
-                Conekta.setApiKey("key_V2cqHW6DLad6jGgKJhaqqww");
+                //PROD
+                //Conekta.setApiKey("key_V2cqHW6DLad6jGgKJhaqqww");
+
+                //DEV
+                Conekta.setApiKey("key_OMk8qnxSgVCZnq411H1ME6w");
+
+
 
                 String jsonInString = new Gson().toJson(conektaDto);
                 System.out.println(jsonInString);
