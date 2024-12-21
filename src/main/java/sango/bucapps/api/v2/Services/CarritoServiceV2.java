@@ -28,6 +28,7 @@ import sango.bucapps.api.v2.Repositories.CarritoItemRepositoryV2;
 import sango.bucapps.api.v2.Repositories.CarritoRepositoryV2;
 import sango.bucapps.api.v2.Repositories.UsuarioRepositoryV2;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -349,6 +350,8 @@ public class CarritoServiceV2 {
 
     // Obtener carritos agrupados por estado (excluyendo "NUEVO")
     public Map<EstadoCarrito, Map<String, Object>> obtenerCarritosAgrupadosPorEstado() {
+        LocalDate hoy = LocalDate.now();
+
         return carritoRepository.findAll().stream()
                 .filter(carrito -> carrito.getEstado() != EstadoCarrito.NUEVO) // Ignorar carritos en estado NUEVO
                 .collect(Collectors.groupingBy(
@@ -359,26 +362,40 @@ public class CarritoServiceV2 {
                                     Map<String, Object> result = new HashMap<>();
                                     result.put("total", carritos.size());
 
-                                    // Calcular el total de cada carrito
-                                    List<Map<String, Object>> carritosConTotal = carritos.stream()
-                                            .map(carrito -> {
-                                                double totalCarrito = carrito.getItems().stream()
-                                                        .mapToDouble(item -> item.getPrenda().getPrecio() * item.getCantidad()) // Precio * cantidad
-                                                        .sum();
+                                    // Clasificar carritos por retrasados, hoy, futuros
+                                    Map<String, List<Map<String, Object>>> carritosPorFecha = new HashMap<>();
+                                    carritosPorFecha.put("retrasados", new ArrayList<>());
+                                    carritosPorFecha.put("hoy", new ArrayList<>());
+                                    carritosPorFecha.put("futuros", new ArrayList<>());
 
-                                                Map<String, Object> carritoMap = new HashMap<>();
-                                                carritoMap.put("carrito", carrito);
-                                                carritoMap.put("totalCarrito", totalCarrito); // Total monetario del carrito
-                                                return carritoMap;
-                                            })
-                                            .collect(Collectors.toList());
+                                    // Calcular el total de cada carrito y clasificar por fecha
+                                    carritos.forEach(carrito -> {
+                                        double totalCarrito = carrito.getItems().stream()
+                                                .mapToDouble(item -> item.getPrenda().getPrecio() * item.getCantidad()) // Precio * cantidad
+                                                .sum();
 
-                                    result.put("carritos", carritosConTotal);
+                                        Map<String, Object> carritoMap = new HashMap<>();
+                                        carritoMap.put("carrito", carrito);
+                                        carritoMap.put("totalCarrito", totalCarrito);
+
+                                        // Clasificar por fecha
+                                        LocalDate fechaRecoleccion = carrito.getEnvios().getFechaRecoleccion().toLocalDate();
+                                        if (fechaRecoleccion.isBefore(hoy)) {
+                                            carritosPorFecha.get("retrasados").add(carritoMap);
+                                        } else if (fechaRecoleccion.equals(hoy)) {
+                                            carritosPorFecha.get("hoy").add(carritoMap);
+                                        } else {
+                                            carritosPorFecha.get("futuros").add(carritoMap);
+                                        }
+                                    });
+
+                                    result.put("carritosPorFecha", carritosPorFecha);
                                     return result;
                                 }
                         )
                 ));
     }
+
 
     @Transactional
     public void actualizarImprimir(Long carritoId) {
